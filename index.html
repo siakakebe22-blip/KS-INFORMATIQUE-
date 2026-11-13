@@ -601,12 +601,15 @@ document.getElementById("ksLogin").addEventListener("submit", async function(e) 
     .select("full_name, role")
     .eq("id", data.user.id)
     .single();
+if (profileError) {
+  msg.textContent = "Connexion réussie, mais profil introuvable.";
+  return;
+}
 
-  if (profileError) {
-    msg.textContent = "Connexion réussie, mais profil introuvable.";
-    return;
-    localStorage.setItem("ks-profile-" + data.user.id, JSON.stringify(profile));
-  }
+localStorage.setItem(
+  "ks-profile-" + data.user.id,
+  JSON.stringify(profile)
+);
 
   authBox.innerHTML = `
     <h2 style="color:#7040a0">Bienvenue ${profile.full_name.replace(/[&<>"']/g, "")} !</h2>

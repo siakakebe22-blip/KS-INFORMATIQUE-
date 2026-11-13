@@ -385,6 +385,71 @@ const supabaseClient = window.supabase.createClient(
   SUPABASE_URL,
   SUPABASE_KEY
 );
+  // KS INFORMATIQUE : sauvegarde des copies hors ligne
+
+function ksGetPending(){
+  try{
+    return JSON.parse(
+      localStorage.getItem('ks-pending-copies') || '[]'
+    );
+  }catch(e){
+    return [];
+  }
+}
+
+function ksSavePending(copie){
+  var liste=ksGetPending();
+  liste.push(copie);
+  localStorage.setItem(
+    'ks-pending-copies',
+    JSON.stringify(liste)
+  );
+}
+
+var ksSyncRunning=false;
+
+async function ksSyncPending(){
+  if(!navigator.onLine || ksSyncRunning) return;
+
+  ksSyncRunning=true;
+
+  try{
+    var sessionResult=await supabaseClient.auth.getSession();
+    var session=sessionResult.data.session;
+
+    if(!session) return;
+
+    var liste=ksGetPending();
+    var restantes=[];
+
+    for(var copie of liste){
+      var result=await supabaseClient
+        .from('submissions')
+        .insert({
+          student_id:session.user.id,
+          quiz_id:copie.quiz_id,
+          answers:copie.answers,
+          status:'pending'
+        });
+
+      if(result.error){
+        restantes.push(copie);
+      }
+    }
+
+    localStorage.setItem(
+      'ks-pending-copies',
+      JSON.stringify(restantes)
+    );
+
+  }catch(e){
+    console.error('Synchronisation KS :',e);
+  }finally{
+    ksSyncRunning=false;
+  }
+}
+
+window.addEventListener('online',ksSyncPending);
 
 // Création de l'espace d'inscription et de connexion
 const authBox = document.createElement("section");

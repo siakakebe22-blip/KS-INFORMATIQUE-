@@ -550,13 +550,15 @@ document.getElementById("ksSignup").addEventListener("submit", async function(e)
 
 // 
 // Connexion
-  // Récupération du compte déjà connecté
+  // 
+// Récupération du compte déjà connecté
 (async function(){
   try {
-    const { data } = await supabaseClient.auth.getSession();
-    const session = data.session;
+    const { data, error } = await supabaseClient.auth.getSession();
 
-    if (!session) return;
+    if (error || !data.session) return;
+
+    const session = data.session;
 
     const saved = localStorage.getItem(
       "ks-profile-" + session.user.id
@@ -573,78 +575,19 @@ document.getElementById("ksSignup").addEventListener("submit", async function(e)
       <p>Votre espace KS INFORMATIQUE est ouvert.</p>
       <p>Votre rôle : <strong>${profile.role}</strong></p>
       <p>Compte déjà enregistré sur cet appareil.</p>
+      <button id="ksLogout" type="button">Déconnexion</button>
     `;
+
+    document.getElementById("ksLogout").addEventListener("click", async function(){
+      await supabaseClient.auth.signOut();
+      location.reload();
+    });
+
   } catch (error) {
     console.log("Session KS :", error);
   }
 })();
-document.getElementById("ksLogin").addEventListener("submit", async function(e) {
-  e.preventDefault();
 
-  const email = document.getElementById("ksLoginEmail").value.trim();
-  const password = document.getElementById("ksLoginPassword").value;
-
-  msg.textContent = "Connexion en cours...";
-
-  const { data, error } = await supabaseClient.auth.signInWithPassword({
-    email: email,
-    password: password
-  });
-
-  if (error) {
-    msg.textContent = "Erreur : " + error.message;
-    return;
-  }
-
-  const { data: profile, error: profileError } = await supabaseClient
-    .from("profiles")
-    .select("full_name, role")
-    .eq("id", data.user.id)
-    .single();
-if (profileError) {
-  msg.textContent = "Connexion réussie, mais profil introuvable.";
-  return;
-}
-
-localStorage.setItem(
-  "ks-profile-" + data.user.id,
-  JSON.stringify(profile)
-);
-
-  authBox.innerHTML = `
-    <h2 style="color:#7040a0">Bienvenue ${profile.full_name.replace(/[&<>"']/g, "")} !</h2>
-    <p>Votre espace KS INFORMATIQUE est ouvert.</p>
-    <p>Votre rôle : <strong>${profile.role}</strong></p>
-    <button id="ksLogout" type="button">Déconnexion</button>
-  `;
-
-  document.getElementById("ksLogout").addEventListener("click", async function() {
-    const { error } = await supabaseClient.auth.signOut();
-
-    if (error) {
-      alert("Erreur : " + error.message);
-      return;
-    }
-
-    location.reload();
-  });
-});
-
-console.log("KS INFORMATIQUE : espace de connexion chargé.");
-
-</script>
-  <script>
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', function() {
-    navigator.serviceWorker.register('./sw.js')
-      .then(function() {
-        console.log('KS INFORMATIQUE : mode hors ligne activé.');
-      })
-      .catch(function(error) {
-        console.error('Erreur Service Worker :', error);
-      });
-  });
-}
   </script>
 
 </body>

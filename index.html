@@ -221,6 +221,7 @@ function quizMenu(){return '<h2 style="margin-top:8px">Quiz</h2><p class="mut">C
 function quiz(k){qs={d:0,p:0,answers:[]};return '<a class="back" href="#quiz">← Tous les quiz</a><h2 style="margin-top:8px">Quiz : '+M[k].t+'</h2>'+QZ[k].map(function(x,i){return '<div class="q"><strong>'+(i+1)+'. '+x[0]+'</strong><div class="opts" data-i="'+i+'">'+x[1].map(function(o,j){return '<button class="opt" data-o="'+j+'">'+o+'</button>';}).join('')+'</div><p class="an"></p></div>';}).join('')+'<div id="fin"></div>';}
 function answer(t){var box=t.parentNode;if(box.dataset.d)return;box.dataset.d=1;var k=location.hash.slice(6),n=QZ[k].length,x=QZ[k][+box.dataset.i],ok=+t.dataset.o===x[2];
   t.classList.add(ok?'good':'wrong');if(!ok)box.children[x[2]].classList.add('good');if(ok)qs.p++;
+                   qs.answers[+box.dataset.i]=+t.dataset.o;
   var f=box.parentNode.querySelector('.an');f.textContent=(ok?'Bonne réponse ! ':'Faux. ')+x[3];f.className='an s'+(ok?'':' bd');
   if(++qs.d===n){var r=res();r.push({m:k,s:qs.p,n:n,t:Date.now()});try{localStorage.setItem('ks-res',JSON.stringify(r.slice(-30)));}catch(e){}
   g('fin').innerHTML='<div class="panel"><h3>Score : '+qs.p+' / '+n+'</h3><p>'+(qs.p===n?'Parfait, bravo !':qs.p>=n/2?'Bien joué, continue !':'Relis le cours et réessaie.')+'</p><a class="btn" href="#resultats">Voir mes résultats</a> <a class="btn alt" href="#cours-'+k+'">Revoir le cours</a></div>';}}

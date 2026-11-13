@@ -577,6 +577,7 @@ document.getElementById("ksLogin").addEventListener("submit", async function(e) 
   if (profileError) {
     msg.textContent = "Connexion réussie, mais profil introuvable.";
     return;
+    localStorage.setItem("ks-profile-" + data.user.id, JSON.stringify(profile));
   }
 
   authBox.innerHTML = `

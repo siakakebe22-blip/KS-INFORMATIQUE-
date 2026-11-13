@@ -324,5 +324,18 @@ g('app').addEventListener('change',function(e){var c=e.target;if(c.dataset.tp===
 window.addEventListener('hashchange',function(){ch=0;rvs=0;render();window.scrollTo(0,0);});
 render();
 </script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  
+<script>
+const SUPABASE_URL = "https://zyicslyhnptawtmvlnkx.supabase.co";
+const SUPABASE_KEY = "sb_publishable_Y2eChao4OfZjcsnzkKOzAQ_Vd_yt98W";
+
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+console.log("KS INFORMATIQUE : connexion Supabase préparée.");
+</script>
 </body>
 </html>

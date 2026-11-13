@@ -601,6 +601,19 @@ document.getElementById("ksLogin").addEventListener("submit", async function(e) 
 console.log("KS INFORMATIQUE : espace de connexion chargé.");
 
 </script>
+  <script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('./sw.js')
+      .then(function() {
+        console.log('KS INFORMATIQUE : mode hors ligne activé.');
+      })
+      .catch(function(error) {
+        console.error('Erreur Service Worker :', error);
+      });
+  });
+}
+  </script>
 
 </body>
 </html>

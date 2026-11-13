@@ -238,8 +238,58 @@ function attest(){var h='<h2 style="margin-top:8px">Mes attestations</h2><p clas
   Object.keys(QZ).forEach(function(k){var b=best(k);if((done[k]||[]).length===nch(k)&&b>=60){c++;h+='<div class="cert"><h3>Attestation de réussite</h3><p><b>'+(nm()||'Élève')+'</b> a terminé le cours « '+M[k].t+' » avec '+b+' % au quiz.</p><p class="mut">Complexe Scolaire KS – KS INFORMATIQUE</p></div>';}});
   if(!c)h+='<div class="panel"><p>Aucune attestation pour l’instant. Terminez un cours et réussissez son quiz pour l’obtenir.</p><a class="btn" href="#cours-histoire">Aller aux cours</a></div>';
   return h+'</div>';}
-function profil(){return '<h2 style="margin-top:8px">Mon profil</h2><div class="panel"><label for="nm"><b>Nom et prénom</b></label><input id="nm" value="'+nm().replace(/"/g,'&quot;')+'" autocomplete="name"><button class="btn" data-save="1">Enregistrer</button> <span id="sv" class="mut"></span></div><p><a class="rl" href="#resultats">Mes résultats</a><a class="rl" href="#attestations">Mes attestations</a></p>';}
-var rtab=0,tp={};try{tp=JSON.parse(localStorage.getItem('ks-tp')||'{}');}catch(e){}
+
+function profil(){
+  return `
+    <h2 style="margin-top:8px">Mon espace élève</h2>
+
+    <div class="hero2">
+      <div>
+        <h1>Bienvenue sur KS INFORMATIQUE</h1>
+        <p>Apprends, entraîne-toi et suis tes progrès.</p>
+      </div>
+      <div>
+        <p><strong>Élève :</strong> ${nm().replace(/[&<>"']/g,'')}</p>
+        <p><strong>Plateforme :</strong> Complexe Scolaire KS</p>
+      </div>
+    </div>
+
+    <div class="two">
+      <div class="pnl">
+        <h3>📚 Mes cours</h3>
+        <div><p>Consulte les leçons d'informatique.</p>
+        <a class="btn" href="#cours">Accéder aux cours</a></div>
+      </div>
+
+      <div class="pnl">
+        <h3>✍️ Mes exercices</h3>
+        <div><p>Entraîne-toi avec les quiz.</p>
+        <a class="btn" href="#quiz">Faire les exercices</a></div>
+      </div>
+
+      <div class="pnl">
+        <h3>📊 Ma progression</h3>
+        <div><p>Consulte tes résultats et ton évolution.</p>
+        <a class="btn" href="#resultats">Voir ma progression</a></div>
+      </div>
+
+      <div class="pnl">
+        <h3>🏆 Mes attestations</h3>
+        <div><p>Retrouve tes attestations.</p>
+        <a class="btn" href="#attestations">Voir mes attestations</a></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h3>Mon profil</h3>
+      <label for="nm"><b>Nom et prénom</b></label>
+      <input id="nm" value="${nm().replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;')}" autocomplete="name">
+      <button class="btn" data-save="1">Enregistrer</button>
+      <span id="sv" class="mut"></span>
+    </div>
+  `;
+}
+
 function tab(s){return '<div style="overflow-x:auto"><table class="tb">'+s.split('~').map(function(r){var c=r.split('|');return '<tr><td>'+c[0]+'</td><td>'+c[1]+'</td></tr>';}).join('')+'</table></div>';}
 var TPS=[
 ['Windows 1 : Organisation du Bureau',['Allumer l’ordinateur','Identifier le Bureau','Identifier les icônes principales','Ouvrir le menu Démarrer','Ouvrir l’Explorateur de fichiers']],

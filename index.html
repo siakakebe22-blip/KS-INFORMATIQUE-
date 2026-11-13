@@ -559,8 +559,8 @@ document.getElementById("ksSignup").addEventListener("submit", async function(e)
 
 // 
 // Connexion
-  // 
 // 
+  msg.textContent = "Diagnostic KS : vérification démarrée...";
 (async function(){
   try {
     const { data, error } = await supabaseClient.auth.getSession();

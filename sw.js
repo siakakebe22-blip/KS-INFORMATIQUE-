@@ -1,5 +1,5 @@
 
-const CACHE_NAME = 'ks-informatique-v4';
+const CACHE_NAME = 'ks-informatique-v5';
 
 const APP_ROOT = self.registration.scope;
 const HOME_URL = APP_ROOT;
@@ -13,11 +13,13 @@ self.addEventListener('install', event => {
     (async () => {
       const cache = await caches.open(CACHE_NAME);
 
-      await cache.addAll([
-        HOME_URL,
-        INDEX_URL,
-        SUPABASE_CDN
-      ]);
+      await cache.add(HOME_URL);
+      
+      try {
+        await cache.add(SUPABASE_CDN);
+      } catch (error) {
+        console.log('Supabase sera chargé en ligne.');
+      }
 
       await self.skipWaiting();
     })()
@@ -26,16 +28,20 @@ self.addEventListener('install', event => {
 
 self.addEventListener('activate', event => {
   event.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(
+    (async () => {
+      const keys = await caches.keys();
+
+      await Promise.all(
         keys
           .filter(key =>
             key.startsWith('ks-informatique-') &&
             key !== CACHE_NAME
           )
           .map(key => caches.delete(key))
-      )
-    ).then(() => self.clients.claim())
+      );
+
+      await self.clients.claim();
+    })()
   );
 });
 
@@ -47,15 +53,12 @@ self.addEventListener('fetch', event => {
   const url = new URL(request.url);
 
   if (
-    url.href === SUPABASE_CDN ||
-    url.origin === self.location.origin
+    url.origin === self.location.origin ||
+    url.href === SUPABASE_CDN
   ) {
     event.respondWith(
       (async () => {
         const cache = await caches.open(CACHE_NAME);
-        const saved = await cache.match(request);
-
-        if (saved) return saved;
 
         try {
           const response = await fetch(request);
@@ -66,6 +69,10 @@ self.addEventListener('fetch', event => {
 
           return response;
         } catch (error) {
+          const saved = await cache.match(request);
+
+          if (saved) return saved;
+
           if (request.mode === 'navigate') {
             return (
               await cache.match(INDEX_URL) ||

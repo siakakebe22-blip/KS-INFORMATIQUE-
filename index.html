@@ -400,10 +400,19 @@ render();
 const SUPABASE_URL = "https://zyicslyhnptawtmvlnkx.supabase.co";
 const SUPABASE_KEY = "sb_publishable_Y2eChao4OfZjcsnzkKOzAQ_Vd_yt98W";
 
+
 const supabaseClient = window.supabase.createClient(
   SUPABASE_URL,
-  SUPABASE_KEY
+  SUPABASE_KEY,
+  {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true,
+      detectSessionInUrl: true
+    }
+  }
 );
+
   // KS INFORMATIQUE : sauvegarde des copies hors ligne
 
 function ksGetPending(){

@@ -326,6 +326,7 @@ render();
 </script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   
+
 <script>
 const SUPABASE_URL = "https://zyicslyhnptawtmvlnkx.supabase.co";
 const SUPABASE_KEY = "sb_publishable_Y2eChao4OfZjcsnzkKOzAQ_Vd_yt98W";
@@ -335,7 +336,120 @@ const supabaseClient = window.supabase.createClient(
   SUPABASE_KEY
 );
 
-console.log("KS INFORMATIQUE : connexion Supabase préparée.");
+// Création de l'espace d'inscription et de connexion
+const authBox = document.createElement("section");
+
+authBox.style.cssText =
+  "max-width:600px;margin:25px auto;padding:20px;background:white;border:2px solid #7040a0;border-radius:14px;color:#222;font-family:Arial,sans-serif;";
+
+authBox.innerHTML = `
+  <h2 style="color:#7040a0">Espace KS INFORMATIQUE</h2>
+
+  <h3>Créer un compte élève</h3>
+
+  <form id="ksSignup">
+    <input id="ksName" placeholder="Nom complet" required
+      style="width:100%;padding:12px;margin:6px 0;box-sizing:border-box">
+
+    <input id="ksEmail" type="email" placeholder="Adresse e-mail" required
+      style="width:100%;padding:12px;margin:6px 0;box-sizing:border-box">
+
+    <input id="ksPassword" type="password" minlength="6"
+      placeholder="Mot de passe (6 caractères minimum)" required
+      style="width:100%;padding:12px;margin:6px 0;box-sizing:border-box">
+
+    <button type="submit">Créer mon compte</button>
+  </form>
+
+  <hr>
+
+  <h3>Déjà inscrit ? Se connecter</h3>
+
+  <form id="ksLogin">
+    <input id="ksLoginEmail" type="email" placeholder="Adresse e-mail" required
+      style="width:100%;padding:12px;margin:6px 0;box-sizing:border-box">
+
+    <input id="ksLoginPassword" type="password" placeholder="Mot de passe" required
+      style="width:100%;padding:12px;margin:6px 0;box-sizing:border-box">
+
+    <button type="submit">Se connecter</button>
+  </form>
+
+  <p id="ksMessage" role="status" aria-live="polite"></p>
+`;
+
+const app = document.getElementById("app");
+
+if (app) {
+  app.parentNode.insertBefore(authBox, app);
+}
+
+const msg = document.getElementById("ksMessage");
+
+// Inscription des élèves
+document.getElementById("ksSignup").addEventListener("submit", async function(e) {
+  e.preventDefault();
+
+  const fullName = document.getElementById("ksName").value.trim();
+  const email = document.getElementById("ksEmail").value.trim();
+  const password = document.getElementById("ksPassword").value;
+
+  msg.textContent = "Création du compte en cours...";
+
+  const { data, error } = await supabaseClient.auth.signUp({
+    email: email,
+    password: password,
+    options: {
+      data: { full_name: fullName }
+    }
+  });
+
+  if (error) {
+    msg.textContent = "Erreur : " + error.message;
+    return;
+  }
+
+  msg.textContent = data.session
+    ? "Compte créé avec succès !"
+    : "Compte créé. Vérifiez votre boîte e-mail pour confirmer votre adresse.";
+});
+
+// Connexion
+document.getElementById("ksLogin").addEventListener("submit", async function(e) {
+  e.preventDefault();
+
+  const email = document.getElementById("ksLoginEmail").value.trim();
+  const password = document.getElementById("ksLoginPassword").value;
+
+  msg.textContent = "Connexion en cours...";
+
+  const { data, error } = await supabaseClient.auth.signInWithPassword({
+    email: email,
+    password: password
+  });
+
+  if (error) {
+    msg.textContent = "Erreur : " + error.message;
+    return;
+  }
+
+  const { data: profile, error: profileError } = await supabaseClient
+    .from("profiles")
+    .select("full_name, role")
+    .eq("id", data.user.id)
+    .single();
+
+  if (profileError) {
+    msg.textContent = "Connexion réussie, mais profil introuvable.";
+    return;
+  }
+
+  msg.textContent = "Bienvenue " + profile.full_name +
+    " ! Votre rôle : " + profile.role;
+});
+
+console.log("KS INFORMATIQUE : espace de connexion chargé.");
 </script>
+
 </body>
 </html>

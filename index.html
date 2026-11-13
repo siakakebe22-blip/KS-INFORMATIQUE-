@@ -223,7 +223,25 @@ function answer(t){var box=t.parentNode;if(box.dataset.d)return;box.dataset.d=1;
   t.classList.add(ok?'good':'wrong');if(!ok)box.children[x[2]].classList.add('good');if(ok)qs.p++;
                    qs.answers[+box.dataset.i]=+t.dataset.o;
   var f=box.parentNode.querySelector('.an');f.textContent=(ok?'Bonne réponse ! ':'Faux. ')+x[3];f.className='an s'+(ok?'':' bd');
-  if(++qs.d===n){var r=res();r.push({m:k,s:qs.p,n:n,t:Date.now()});try{localStorage.setItem('ks-res',JSON.stringify(r.slice(-30)));}catch(e){}
+  if(++qs.d===n){
+  var ids={
+    histoire:'ec3db878-3b19-4cf1-835b-704852c5508a',
+    hardware:'cb9eff46-cf09-4fa9-8984-a97917f019cb',
+    software:'9bdc9ff6-1e4b-4422-a471-ca0f7661c009',
+    windows:'57e7129a-e99a-47f5-9d9d-32f2f8fb2436',
+    word:'ec6b74db-b1f4-41a4-a1b0-a0919ebaa575',
+    excel:'3aba8086-31af-4917-b4da-9471b97c62bb',
+    branches:'ad1b5435-bbd5-4f15-8463-e949afd0c0eb',
+    avantages:'cd15b017-3911-42be-accd-c625aa79ed5f'
+  };
+  if(ids[k]){
+    ksSavePending({
+      quiz_id:ids[k],
+      answers:qs.answers
+    });
+    ksSyncPending();
+  }
+  var r=res();r.push({m:k,s:qs.p,n:n,t:Date.now()});try{localStorage.setItem('ks-res',JSON.stringify(r.slice(-30)));}catch(e){}
   g('fin').innerHTML='<div class="panel"><h3>Score : '+qs.p+' / '+n+'</h3><p>'+(qs.p===n?'Parfait, bravo !':qs.p>=n/2?'Bien joué, continue !':'Relis le cours et réessaie.')+'</p><a class="btn" href="#resultats">Voir mes résultats</a> <a class="btn alt" href="#cours-'+k+'">Revoir le cours</a></div>';}}
 function bilan(){var L=['Bilan KS INFORMATIQUE','Élève : '+(nm()||'(nom non renseigné)'),'Date : '+new Date().toLocaleDateString('fr-FR'),''];
   Object.keys(QZ).forEach(function(k){var b=best(k);L.push(M[k].t+' : chapitres '+(done[k]||[]).length+'/'+nch(k)+', quiz '+(b<0?'non fait':b+' %'));});

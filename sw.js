@@ -39,6 +39,27 @@ self.addEventListener('fetch', event => {
   if (request.method !== 'GET') return;
 
   const url = new URL(request.url);
+  
+if (url.hostname === 'cdn.jsdelivr.net') {
+  event.respondWith(
+    (async () => {
+      const cache = await caches.open(CACHE_NAME);
+      const saved = await cache.match(request);
+
+      if (saved) return saved;
+
+      try {
+        const response = await fetch(request);
+        await cache.put(request, response.clone());
+        return response;
+      } catch (error) {
+        return Response.error();
+      }
+    })()
+  );
+  return;
+}
+
 
   if (url.origin !== self.location.origin) return;
 

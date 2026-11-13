@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ks-informatique-v1';
+const CACHE_NAME = 'ks-informatique-v2';
 
 const FILES = [
   './',

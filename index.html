@@ -558,51 +558,57 @@ document.getElementById("ksSignup").addEventListener("submit", async function(e)
 });
 
 // 
+
 // Connexion
-// 
-(async function(){
-  try {
-    const { data, error } = await supabaseClient.auth.getSession();
+document.getElementById("ksLogin").addEventListener("submit", async function(e) {
+  e.preventDefault();
 
-    if (error) {
-      msg.textContent = "Diagnostic : " + error.message;
-      return;
-    }
+  const email = document.getElementById("ksLoginEmail").value.trim();
+  const password = document.getElementById("ksLoginPassword").value;
 
-    if (!data.session) {
-      msg.textContent = "Diagnostic : aucune session enregistrée.";
-      return;
-    }
+  msg.textContent = "Connexion en cours...";
 
-    const saved = localStorage.getItem(
-      "ks-profile-" + data.session.user.id
-    );
+  const { data, error } = await supabaseClient.auth.signInWithPassword({
+    email: email,
+    password: password
+  });
 
-    if (!saved) {
-      msg.textContent = "Diagnostic : session présente, mais profil absent.";
-      return;
-    }
-
-    const profile = JSON.parse(saved);
-
-    authBox.innerHTML = `
-      <h2 style="color:#7040a0">
-        Bienvenue ${profile.full_name.replace(/[&<>"']/g, "")} !
-      </h2>
-      <p>Votre espace KS INFORMATIQUE est ouvert.</p>
-      <p>Votre rôle : <strong>${profile.role}</strong></p>
-      <button id="ksLogout" type="button">Déconnexion</button>
-    `;
-
-    document.getElementById("ksLogout").addEventListener("click", async function(){
-      await supabaseClient.auth.signOut();
-      location.reload();
-    });
-
-  } catch (error) {
-    msg.textContent = "Erreur diagnostic : " + error.message;
+  if (error) {
+    msg.textContent = "Erreur : " + error.message;
+    return;
   }
-})();
+
+  const { data: profile, error: profileError } = await supabaseClient
+    .from("profiles")
+    .select("full_name, role")
+    .eq("id", data.user.id)
+    .single();
+
+  if (profileError) {
+    msg.textContent = "Connexion réussie, mais profil introuvable.";
+    return;
+  }
+
+  localStorage.setItem(
+    "ks-profile-" + data.user.id,
+    JSON.stringify(profile)
+  );
+
+  authBox.innerHTML = `
+    <h2 style="color:#7040a0">
+      Bienvenue ${profile.full_name.replace(/[&<>"']/g, "")} !
+    </h2>
+    <p>Votre espace KS INFORMATIQUE est ouvert.</p>
+    <p>Votre rôle : <strong>${profile.role}</strong></p>
+    <button id="ksLogout" type="button">Déconnexion</button>
+  `;
+
+  document.getElementById("ksLogout").addEventListener("click", async function() {
+    await supabaseClient.auth.signOut();
+    location.reload();
+  });
+});
+
 
   </script>
 

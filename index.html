@@ -560,20 +560,29 @@ document.getElementById("ksSignup").addEventListener("submit", async function(e)
 // 
 // Connexion
   // 
-// Récupération du compte déjà connecté
+// 
 (async function(){
   try {
     const { data, error } = await supabaseClient.auth.getSession();
 
-    if (error || !data.session) return;
+    if (error) {
+      msg.textContent = "Diagnostic : " + error.message;
+      return;
+    }
 
-    const session = data.session;
+    if (!data.session) {
+      msg.textContent = "Diagnostic : aucune session enregistrée.";
+      return;
+    }
 
     const saved = localStorage.getItem(
-      "ks-profile-" + session.user.id
+      "ks-profile-" + data.session.user.id
     );
 
-    if (!saved) return;
+    if (!saved) {
+      msg.textContent = "Diagnostic : session présente, mais profil absent.";
+      return;
+    }
 
     const profile = JSON.parse(saved);
 
@@ -583,7 +592,6 @@ document.getElementById("ksSignup").addEventListener("submit", async function(e)
       </h2>
       <p>Votre espace KS INFORMATIQUE est ouvert.</p>
       <p>Votre rôle : <strong>${profile.role}</strong></p>
-      <p>Compte déjà enregistré sur cet appareil.</p>
       <button id="ksLogout" type="button">Déconnexion</button>
     `;
 
@@ -593,7 +601,7 @@ document.getElementById("ksSignup").addEventListener("submit", async function(e)
     });
 
   } catch (error) {
-    console.log("Session KS :", error);
+    msg.textContent = "Erreur diagnostic : " + error.message;
   }
 })();
 

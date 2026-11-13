@@ -45,6 +45,16 @@ p{margin:0 0 12px}.mut{color:var(--mut);margin:4px 0 0}
 .side h3{background:var(--pu);color:#fff;padding:10px 14px}
 .side a{display:flex;gap:10px;align-items:center;padding:8px 12px;color:var(--ink);text-decoration:none;border-bottom:1px solid var(--line);font-weight:600;font-size:.92rem;line-height:1.25}
 .side a.on{background:var(--ye);color:#1B1433}.side svg{width:26px;height:26px;flex:none;color:var(--ac)}.side a.on svg{color:#1B1433}
+  
+.side{
+  position:sticky;
+  top:15px;
+  align-self:start;
+  max-height:calc(100vh - 30px);
+  overflow-y:auto;
+  z-index:20;
+}
+
 .side small{display:block;font-weight:400;color:var(--mut);font-size:.78rem}.side a.on small{color:#3b3320}
 @media(max-width:979px){.side{display:flex;overflow-x:auto}.side h3{display:none}.side a{flex:none;border-bottom:0;border-right:1px solid var(--line)}}
 .hero2{display:flex;flex-direction:column;gap:12px;background:linear-gradient(135deg,#2A1270,#5B2DB8);color:#fff;border-radius:16px;padding:20px;border-bottom:6px solid var(--gr)}

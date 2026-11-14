@@ -407,7 +407,7 @@ g('app').addEventListener('click',function(e){
   else if(t.classList.contains('rv')){var q=t.parentNode.querySelector('.an');q.classList.toggle('s');t.textContent=q.classList.contains('s')?'Masquer':'Voir le corrigé';}
 });
 g('app').addEventListener('input',function(e){if(e.target.id!=='cn'&&e.target.id!=='cm')return;var t=encodeURIComponent(cl(g('cn').value.trim(),g('cm').value.trim()));g('cw').href='https://wa.me/224624460422?text='+t;g('ce').href='mailto:siakakebe22@gmail.com?subject='+encodeURIComponent('Message KS INFORMATIQUE')+'&body='+t;});
-g('app').addEventListener('change',function(e){var c=e.target;if(c.dataset.tp===undefined)return;var i=c.dataset.tp,a=tp[i]||[];a[+c.dataset.s]=c.checked;tp[i]=a;try{localStorage.setItem('ks-tp',JSON.stringify(tp));}catch(x){}g('c'+i).textContent=a.filter(Boolean).length+'/'+TPS[i][1].length;});
+g('app').addEventListener('change',function(e){var c=e.target;if(c.dataset.tp===undefined)return;var i=c.dataset.tp,a=tp[i]||[];a[+c.dataset.s]=c.checked;tp[i]=a;try{localStorage.setItem('ks-tp',JSON.stringify(tp));var uid=localStorage.getItem('ks-tp-active-user');if(uid)localStorage.setItem('ks-tp-user-'+uid,JSON.stringify(tp));}catch(x){}g('c'+i).textContent=a.filter(Boolean).length+'/'+TPS[i][1].length;if(typeof ksSyncTP==='function')ksSyncTP();});
 window.addEventListener('hashchange',function(){ch=0;rvs=0;render();window.scrollTo(0,0);});
 render();
 </script>
@@ -496,6 +496,70 @@ async function ksSyncPending(){
 }
 
 window.addEventListener('online',ksSyncPending);
+
+/* Synchronisation sécurisée des travaux pratiques par compte élève */
+var ksTPSyncRunning=false;
+function ksMergeTP(localData,cloudData){
+  var out=[],n=Math.max(localData.length,cloudData.length);
+  for(var i=0;i<n;i++){
+    var a=Array.isArray(localData[i])?localData[i]:[];
+    var b=Array.isArray(cloudData[i])?cloudData[i]:[];
+    var row=[],m=Math.max(a.length,b.length);
+    for(var j=0;j<m;j++)row[j]=!!a[j]||!!b[j];
+    out[i]=row;
+  }
+  return out;
+}
+function ksActivateTPForSession(userId){
+  var key='ks-tp-user-'+userId, saved=localStorage.getItem(key);
+  if(saved){
+    try{tp=JSON.parse(saved)||[];}catch(e){tp=[];}
+  }else if(!localStorage.getItem('ks-tp-migrated')){
+    try{tp=JSON.parse(localStorage.getItem('ks-tp')||'[]');}catch(e){tp=[];}
+    localStorage.setItem(key,JSON.stringify(tp));
+    localStorage.setItem('ks-tp-migrated','1');
+  }else{
+    tp=[];
+    localStorage.setItem(key,'[]');
+  }
+  localStorage.setItem('ks-tp-active-user',userId);
+  localStorage.setItem('ks-tp',JSON.stringify(tp));
+  ksSyncTP();
+}
+function ksDeactivateTP(){
+  localStorage.removeItem('ks-tp-active-user');
+  tp=[];
+  localStorage.setItem('ks-tp','[]');
+}
+async function ksSyncTP(){
+  if(!navigator.onLine||ksTPSyncRunning)return;
+  ksTPSyncRunning=true;
+  try{
+    var sessionResult=await supabaseClient.auth.getSession();
+    var session=sessionResult.data&&sessionResult.data.session;
+    if(!session)return;
+    var userId=session.user.id;
+    if(localStorage.getItem('ks-tp-active-user')!==userId)return;
+    var key='ks-tp-user-'+userId,localData=[];
+    try{localData=JSON.parse(localStorage.getItem(key)||'[]');}catch(e){localData=[];}
+    var read=await supabaseClient.from('tp_progress').select('progress').eq('student_id',userId).maybeSingle();
+    if(read.error)throw read.error;
+    var cloudData=read.data&&Array.isArray(read.data.progress)?read.data.progress:[];
+    var merged=ksMergeTP(localData,cloudData);
+    localStorage.setItem(key,JSON.stringify(merged));
+    localStorage.setItem('ks-tp',JSON.stringify(merged));
+    tp=merged;
+    var write=await supabaseClient.from('tp_progress').upsert({student_id:userId,progress:merged,updated_at:new Date().toISOString()},{onConflict:'student_id'});
+    if(write.error)throw write.error;
+    if((location.hash||'').slice(1)==='ressources')render();
+  }catch(e){
+    console.error('Synchronisation des TP KS :',e);
+  }finally{
+    ksTPSyncRunning=false;
+  }
+}
+window.addEventListener('online',ksSyncTP);
+
 
 // Création de l'espace d'inscription et de connexion
 const authBox = document.createElement("section");
@@ -612,6 +676,8 @@ document.getElementById("ksLogin").addEventListener("submit", async function(e) 
     JSON.stringify(profile)
   );
 
+  ksActivateTPForSession(data.user.id);
+
   authBox.innerHTML = `
     <h2 style="color:#7040a0">
       Bienvenue ${profile.full_name.replace(/[&<>"']/g, "")} !
@@ -622,6 +688,7 @@ document.getElementById("ksLogin").addEventListener("submit", async function(e) 
   `;
 
   document.getElementById("ksLogout").addEventListener("click", async function() {
+    ksDeactivateTP();
     await supabaseClient.auth.signOut();
     location.reload();
   });
@@ -633,6 +700,8 @@ document.getElementById("ksLogin").addEventListener("submit", async function(e) 
     const { data, error } = await supabaseClient.auth.getSession();
 
     if (error || !data.session) return;
+
+    ksActivateTPForSession(data.session.user.id);
 
     const saved = localStorage.getItem(
       "ks-profile-" + data.session.user.id
@@ -653,7 +722,8 @@ document.getElementById("ksLogin").addEventListener("submit", async function(e) 
     `;
 
     document.getElementById("ksLogout").addEventListener("click", async function(){
-      await supabaseClient.auth.signOut();
+      ksDeactivateTP();
+    await supabaseClient.auth.signOut();
       location.reload();
     });
 

@@ -118,7 +118,7 @@ Deno.serve(async (req: Request) => {
   }
 
   try {
-    const apiKey = Deno.env.get("OPENAI_API_KEY");
+    const apiKey = Deno.env.get("GEMINI_API_KEY");
     if (!apiKey) {
       return new Response(JSON.stringify({
         error: "Le service MR KEBE n’est pas encore configuré. Réessaie plus tard.",
@@ -134,28 +134,45 @@ Deno.serve(async (req: Request) => {
       }), { status: 400, headers: jsonHeaders });
     }
 
-    const freeResearch = await searchFreeSources(message);\n\n    const response = await fetch("https://api.openai.com/v1/responses", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${apiKey}`,
-        "Content-Type": "application/json",
+    const freeResearch = await searchFreeSources(message);
+
+    const response = await fetch(
+      "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",
+      {
+        method: "POST",
+        headers: {
+          "x-goog-api-key": apiKey,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          systemInstruction: {
+            parts: [{ text: instructions }],
+          },
+          contents: [{
+            role: "user",
+            parts: [{ text: `Question de l’élève : ${message}\n\n${freeResearch}` }],
+          }],
+          generationConfig: {
+            temperature: 0.4,
+            maxOutputTokens: 1200,
+          },
+        }),
       },
-      body: JSON.stringify({
-        model: "gpt-6-luna",
-        instructions,
-        input: `Question de l’élève : ${message}\\n\\n${freeResearch}`,
-        max_output_tokens: 1200,
-      }),
-    });
+    );
 
     const data = await response.json();
 
     if (!response.ok) {
-      console.error("OpenAI API error:", data?.error?.message ?? response.status);
+      console.error("Gemini API error:", data?.error?.message ?? response.status);
       return new Response(JSON.stringify({
         error: "MR KEBE rencontre un problème temporaire. Réessaie dans un instant.",
       }), { status: 502, headers: jsonHeaders });
     }
+
+    const answer = (data.candidates?.[0]?.content?.parts ?? [])
+      .map((part: any) => typeof part.text === "string" ? part.text : "")
+      .filter(Boolean)
+      .join("\n");
 
     const answer = data.output_text || (data.output ?? [])
       .flatMap((item: any) => item.content ?? [])

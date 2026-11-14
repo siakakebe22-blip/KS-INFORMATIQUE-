@@ -1,0 +1,22 @@
+{
+  "id": "./",
+  "name": "KS INFORMATIQUE",
+  "short_name": "KS Informatique",
+  "description": "Cours, exercices et travaux pratiques du Complexe Scolaire KS.",
+  "lang": "fr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
+  "orientation": "any",
+  "background_color": "#F3F0FB",
+  "theme_color": "#3F1D8F",
+  "icons": [
+    {
+      "src": "./ks-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

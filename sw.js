@@ -1,5 +1,5 @@
 
-const CACHE_NAME = 'ks-informatique-v5';
+const CACHE_NAME = 'ks-informatique-v6';
 
 const APP_ROOT = self.registration.scope;
 const HOME_URL = APP_ROOT;
@@ -13,7 +13,7 @@ self.addEventListener('install', event => {
     (async () => {
       const cache = await caches.open(CACHE_NAME);
 
-      await cache.add(HOME_URL);
+      await cache.add(HOME_URL);\n      await cache.add(new URL('manifest.webmanifest', APP_ROOT).href);\n      await cache.add(new URL('ks-icon.svg', APP_ROOT).href);
       
       try {
         await cache.add(SUPABASE_CDN);

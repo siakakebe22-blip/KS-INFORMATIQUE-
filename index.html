@@ -654,40 +654,6 @@ document.getElementById("ksLogin").addEventListener("submit", async function(e) 
   }
 })();
 
- // Restauration automatique de la session KS
-(async function(){
-  try {
-    const { data, error } = await supabaseClient.auth.getSession();
-
-    if (error || !data.session) return;
-
-    const saved = localStorage.getItem(
-      "ks-profile-" + data.session.user.id
-    );
-
-    if (!saved) return;
-
-    const profile = JSON.parse(saved);
-
-    authBox.innerHTML = `
-      <h2 style="color:#7040a0">
-        Bienvenue ${profile.full_name.replace(/[&<>"']/g, "")} !
-      </h2>
-      <p>Votre espace KS INFORMATIQUE est ouvert.</p>
-      <p>Votre rôle : <strong>${profile.role}</strong></p>
-      <p>Compte déjà enregistré sur cet appareil.</p>
-      <button id="ksLogout" type="button">Déconnexion</button>
-    `;
-
-    document.getElementById("ksLogout").addEventListener("click", async function(){
-      await supabaseClient.auth.signOut();
-      location.reload();
-    });
-
-  } catch (error) {
-    console.log("Session KS :", error);
-  }
-})();
 
   </script>
 

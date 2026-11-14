@@ -3,6 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#3F1D8F">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./ks-icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="./ks-icon.svg">
 <title>KS INFORMATIQUE – Complexe Scolaire KS</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@600;800&display=swap">
 <style>
@@ -803,5 +810,39 @@ document.getElementById("ksLogin").addEventListener("submit", async function(e) 
 
   </script>
 
+
+<script>
+(function(){
+  if (!('serviceWorker' in navigator)) return;
+  window.addEventListener('load', function(){
+    navigator.serviceWorker.register('./sw.js', {scope:'./'})
+      .then(function(){ console.log('KS INFORMATIQUE : application prête hors connexion.'); })
+      .catch(function(error){ console.log('Installation hors connexion :', error); });
+  });
+  var deferredPrompt = null;
+  var bar = document.querySelector('.bar');
+  var installButton = document.createElement('button');
+  installButton.id = 'ksInstallApp';
+  installButton.type = 'button';
+  installButton.textContent = 'Installer';
+  installButton.style.cssText = 'display:none;margin-left:auto;flex:none;border:0;border-radius:9px;padding:9px 12px;background:#FFD21F;color:#1B1433;font-weight:800;cursor:pointer';
+  if (bar) bar.appendChild(installButton);
+  window.addEventListener('beforeinstallprompt', function(event){
+    event.preventDefault();
+    deferredPrompt = event;
+    installButton.style.display = 'block';
+  });
+  installButton.addEventListener('click', async function(){
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    await deferredPrompt.userChoice;
+    deferredPrompt = null;
+    installButton.style.display = 'none';
+  });
+  window.addEventListener('appinstalled', function(){
+    installButton.style.display = 'none';
+  });
+})();
+</script>
 </body>
 </html>

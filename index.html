@@ -861,5 +861,105 @@ document.getElementById("ksLogin").addEventListener("submit", async function(e) 
   });
 })();
 </script>
+
+<style>
+#mrKebeLauncher{position:fixed;right:18px;bottom:18px;z-index:9998;border:0;border-radius:999px;background:#3F1D8F;color:#fff;padding:10px 16px 10px 10px;display:flex;align-items:center;gap:10px;box-shadow:0 5px 22px #21104455;font:700 15px system-ui;cursor:pointer}
+#mrKebeLauncher img{width:42px;height:42px;border-radius:50%;object-fit:cover;border:2px solid #FFD21F}
+#mrKebePanel{position:fixed;right:16px;bottom:84px;z-index:9999;width:min(370px,calc(100vw - 24px));height:min(540px,calc(100dvh - 110px));background:var(--card,#fff);color:var(--ink,#1B1433);border:1px solid var(--line,#DDD6F0);border-radius:18px;box-shadow:0 12px 40px #14072b55;display:none;overflow:hidden;flex-direction:column}
+#mrKebePanel.open{display:flex}
+#mrKebeHead{background:#3F1D8F;color:#fff;padding:11px 13px;display:flex;align-items:center;gap:10px}
+#mrKebeHead img{width:42px;height:42px;border-radius:50%;object-fit:cover;border:2px solid #FFD21F}
+#mrKebeHead strong{display:block}#mrKebeHead small{color:#FFD21F}
+#mrKebeClose{margin-left:auto;background:transparent;color:#fff;border:0;font-size:25px;cursor:pointer}
+#mrKebeMessages{padding:12px;overflow-y:auto;flex:1;display:flex;flex-direction:column;gap:9px}
+.mr-kebe-msg{max-width:88%;padding:10px 12px;border-radius:13px;white-space:pre-wrap;overflow-wrap:anywhere;font-size:14px;line-height:1.45}
+.mr-kebe-msg.bot{align-self:flex-start;background:var(--bg,#F3F0FB);border:1px solid var(--line,#DDD6F0)}
+.mr-kebe-msg.user{align-self:flex-end;background:#5B2DB8;color:#fff}
+#mrKebeForm{padding:10px;border-top:1px solid var(--line,#DDD6F0);display:flex;gap:7px}
+#mrKebeInput{margin:0;min-width:0;flex:1;font-size:14px}
+#mrKebeSend{border:0;border-radius:10px;background:#FFD21F;color:#1B1433;font-weight:800;padding:0 14px;cursor:pointer}
+#mrKebeSend:disabled{opacity:.55;cursor:wait}
+@media(max-width:480px){#mrKebePanel{right:8px;bottom:76px;width:calc(100vw - 16px);height:min(72dvh,560px)}#mrKebeLauncher{right:12px;bottom:12px}}
+</style>
+<script>
+(function(){
+  if (document.getElementById("mrKebeLauncher")) return;
+
+  var launcher = document.createElement("button");
+  launcher.id = "mrKebeLauncher";
+  launcher.type = "button";
+  launcher.setAttribute("aria-label","Ouvrir le professeur virtuel MR KEBE");
+  launcher.innerHTML = '<img alt="" src="' + (PIC.prof || "") + '"><span>MR KEBE · Aide informatique</span>';
+
+  var panel = document.createElement("section");
+  panel.id = "mrKebePanel";
+  panel.setAttribute("aria-label","Discussion avec MR KEBE");
+  panel.innerHTML =
+    '<div id="mrKebeHead"><img alt="Portrait du professeur" src="' + (PIC.prof || "") + '">' +
+    '<div><strong>MR KEBE</strong><small>Professeur virtuel · KS INFORMATIQUE</small></div>' +
+    '<button id="mrKebeClose" type="button" aria-label="Fermer">×</button></div>' +
+    '<div id="mrKebeMessages" aria-live="polite"></div>' +
+    '<form id="mrKebeForm"><input id="mrKebeInput" maxlength="2000" autocomplete="off" placeholder="Pose ta question d’informatique…" aria-label="Ta question" required>' +
+    '<button id="mrKebeSend" type="submit">Envoyer</button></form>';
+
+  document.body.appendChild(launcher);
+  document.body.appendChild(panel);
+
+  var messages = panel.querySelector("#mrKebeMessages");
+  var form = panel.querySelector("#mrKebeForm");
+  var input = panel.querySelector("#mrKebeInput");
+  var send = panel.querySelector("#mrKebeSend");
+
+  function addMessage(text, who){
+    var bubble = document.createElement("div");
+    bubble.className = "mr-kebe-msg " + who;
+    bubble.textContent = text;
+    messages.appendChild(bubble);
+    messages.scrollTop = messages.scrollHeight;
+  }
+
+  addMessage("Bonjour ! Je suis MR KEBE, ton professeur virtuel. Je peux t’aider sur les huit thèmes du programme KS INFORMATIQUE : histoire, branches, avantages et conséquences, Hardware, Software, Windows, Word et Excel.", "bot");
+
+  launcher.addEventListener("click",function(){panel.classList.toggle("open");if(panel.classList.contains("open"))input.focus();});
+  panel.querySelector("#mrKebeClose").addEventListener("click",function(){panel.classList.remove("open");});
+
+  form.addEventListener("submit",async function(event){
+    event.preventDefault();
+    var question = input.value.trim();
+    if(!question || send.disabled) return;
+
+    addMessage(question,"user");
+    input.value = "";
+    send.disabled = true;
+    send.textContent = "…";
+    var waiting = document.createElement("div");
+    waiting.className = "mr-kebe-msg bot";
+    waiting.textContent = "MR KEBE prépare sa réponse…";
+    messages.appendChild(waiting);
+    messages.scrollTop = messages.scrollHeight;
+
+    try{
+      var sessionResult = await supabaseClient.auth.getSession();
+      if(!sessionResult.data || !sessionResult.data.session){
+        waiting.textContent = "Pour utiliser MR KEBE, connecte-toi d’abord à ton compte élève KS.";
+        return;
+      }
+      var result = await supabaseClient.functions.invoke("mr-kebe",{body:{message:question}});
+      if(result.error) throw result.error;
+      if(result.data && result.data.error) throw new Error(result.data.error);
+      waiting.textContent = (result.data && result.data.answer) || "Je n’ai pas reçu de réponse. Réessaie.";
+    }catch(error){
+      console.error("MR KEBE:",error);
+      waiting.textContent = "Je n’arrive pas à répondre pour le moment. Vérifie ta connexion ou réessaie plus tard.";
+    }finally{
+      send.disabled = false;
+      send.textContent = "Envoyer";
+      input.focus();
+      messages.scrollTop = messages.scrollHeight;
+    }
+  });
+})();
+</script>
+
 </body>
 </html>

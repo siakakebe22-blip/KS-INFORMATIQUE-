@@ -189,7 +189,7 @@ table{max-width:100%;display:block;overflow-x:auto}
 <header class="top">
 <div class="bar"><img class="lg" id="logo" alt="Logo du Complexe Scolaire KS" width="46" height="46">
 <div><b>KS INFORMATIQUE</b><small>Complexe Scolaire KS · Apprendre, comprendre, réussir</small></div></div>
-<nav><div class="nv" id="nv"><a href="#accueil">Accueil</a><a href="#cours">Cours</a><a href="#videos">Vidéos</a><a href="#quiz">Quiz</a><a href="#resultats">Résultats</a><a href="#profil">Mon espace</a><a href="#ressources">Ressources</a><a href="#apropos">À propos</a><a href="#contact">Contact</a></div></nav>
+<nav><div class="nv" id="nv"><a href="#accueil">Accueil</a><a href="#cours">Cours</a><a href="#guide">Guide d’étude</a><a href="#glossaire">Glossaire</a><a href="#videos">Vidéos</a><a href="#quiz">Quiz</a><a href="#resultats">Résultats</a><a href="#profil">Mon espace</a><a href="#ressources">Ressources</a><a href="#apropos">À propos</a><a href="#contact">Contact</a></div></nav>
 </header>
 <main id="app"></main>
 <footer><div>Complexe Scolaire KS – Conakry, Guinée<br>siakakebe22@gmail.com – WhatsApp : +224 624 46 04 22<br>www.ks-informatique.fr<br><em>Ensemble, construisons votre réussite !</em></div></footer>
@@ -305,7 +305,7 @@ function nm(){try{return localStorage.getItem('ks-name')||'';}catch(e){return ''
 function best(k){var b=-1;res().forEach(function(x){if(x.m===k)b=Math.max(b,Math.round(x.s/x.n*100));});return b;}
 function nch(k){return M[k].ch?M[k].ch.length:0;}
 function home(){
-  return '<section class="hero"><h1>Bienvenue sur <span>KS INFORMATIQUE !</span></h1><p>Apprenez l’informatique, développez vos compétences et préparez votre avenir.</p><a class="btn" href="#cours-histoire">Commencer à apprendre</a> <a class="btn alt" href="#quiz">Faire un quiz</a><img class="hi" src="'+PIC.laptop+'" alt="Ordinateur portable et réseau mondial"></section><div class="prof"><img src="'+PIC.prof+'" alt="Portrait du professeur"><div><b>SIAKA KEBE</b><br>Professeur d’informatique<br><span>Complexe Scolaire KS</span></div></div><p style="margin-top:10px"><a class="btn" href="#contact">Contacter le professeur</a> <a class="btn alt" href="#apropos">À propos</a></p><h2>Nos cours</h2><div class="grid">'+KEYS.map(function(k){return '<a class="dom" href="#cours-'+k+'">'+ico(k)+'<b>'+M[k].t+'</b>'+(M[k].sub?'<small>'+M[k].sub+'</small>':'')+'</a>';}).join('')+'</div><h2>Nos atouts</h2><ul class="ck"><li>Programme commun collège et lycée</li><li>Cours clairs et illustrés</li><li>Exercices avec corrigés</li><li>Quiz avec correction automatique</li><li>Suivi de vos résultats et attestations</li></ul><img class="hi" src="'+PIC['class']+'" alt="Salle informatique">';
+  return '<section class="hero"><h1>Bienvenue sur <span>KS INFORMATIQUE !</span></h1><p>Apprenez l’informatique, développez vos compétences et préparez votre avenir.</p><a class="btn" href="#cours-histoire">Commencer à apprendre</a> <a class="btn alt" href="#quiz">Faire un quiz</a><img class="hi" src="'+PIC.laptop+'" alt="Ordinateur portable et réseau mondial"></section><div class="prof"><img src="'+PIC.prof+'" alt="Portrait du professeur"><div><b>SIAKA KEBE</b><br>Professeur d’informatique<br><span>Complexe Scolaire KS</span></div></div><p style="margin-top:10px"><a class="btn" href="#contact">Contacter le professeur</a> <a class="btn alt" href="#apropos">À propos</a></p><h2>Nos cours</h2><div class="grid">'+KEYS.map(function(k){return '<a class="dom" href="#cours-'+k+'">'+ico(k)+'<b>'+M[k].t+'</b>'+(M[k].sub?'<small>'+M[k].sub+'</small>':'')+'</a>';}).join('')+'</div><h2>Nos atouts</h2><ul class="ck"><li>Programme commun collège et lycée</li><li>Cours clairs et illustrés</li><li>Exercices avec corrigés</li><li>Quiz avec correction automatique</li><li>Suivi de vos résultats et attestations</li></ul><div class="two"><article class="pnl"><h3>📘 Guide d’étude</h3><div><p>Découvre le parcours conseillé, les objectifs des huit thèmes et une méthode pour apprendre efficacement.</p><a class="btn alt" href="#guide">Consulter le guide</a></div></article><article class="pnl"><h3>🔎 Glossaire informatique</h3><div><p>Retrouve les définitions des mots essentiels avec des exemples simples.</p><a class="btn alt" href="#glossaire">Ouvrir le glossaire</a></div></article></div><img class="hi" src="'+PIC['class']+'" alt="Salle informatique">
 }
 function catalog(){
   return '<h2 style="margin-top:8px">Nos cours</h2><p class="mut">Choisissez un cours pour commencer.</p><div style="margin-top:14px">'+KEYS.map(function(k){var m=M[k],n=nch(k),d=(done[k]||[]).length;
@@ -487,10 +487,68 @@ function videos(){
     return '<div class="pnl"><h3>'+title+'</h3><div><p>'+desc+'</p><a class="btn alt" href="'+link+'" target="_blank" rel="noopener">▶ Voir les vidéos</a></div></div>';
   }).join('')+'</div><div class="panel"><b>Conseil aux élèves :</b><p>Regardez la vidéo du thème étudié, prenez des notes et reproduisez les manipulations sur votre ordinateur.</p></div>';
 }
+
+function guideEtude(){
+  var blocs=[
+    ['1. Histoire de l’informatique','Comprendre comment les besoins de calcul ont conduit aux machines, puis aux ordinateurs modernes. Repérer les grandes dates et associer chaque inventeur à sa contribution.','Commence par la chronologie, puis raconte avec tes propres mots le passage des machines mécaniques aux ordinateurs électroniques.','cours-histoire'],
+    ['2. Branches de l’informatique','Distinguer les domaines d’application et comprendre les notions de donnée, information, traitement, stockage et logiciel.','Classe des exemples de la vie quotidienne : gestion des notes, création d’un document, calcul d’un budget.','cours-branches'],
+    ['3. Avantages et conséquences','Identifier les services rendus par l’informatique et reconnaître les risques liés à un usage excessif ou imprudent.','Pour chaque avantage, trouve un exemple concret ; pour chaque risque, propose une précaution.','cours-avantages'],
+    ['4. Hardware : matériel','Reconnaître les composants physiques, leur fonction et les périphériques d’entrée, de sortie et de stockage.','Observe un ordinateur réel et nomme les éléments que tu peux identifier sans démonter l’appareil.','cours-hardware'],
+    ['5. Software : logiciels','Comprendre la différence entre matériel et logiciel, puis distinguer système d’exploitation, application et utilitaire.','Associe chaque logiciel que tu connais à sa fonction : faire fonctionner l’ordinateur, rédiger, calculer ou lire un fichier.','cours-software'],
+    ['6. Windows','Utiliser le Bureau, les fenêtres, le menu Démarrer et l’Explorateur pour organiser les fichiers et dossiers.','Réalise les manipulations sur un ordinateur : créer un dossier, le renommer, copier un fichier et l’enregistrer.','cours-windows'],
+    ['7. Microsoft Word','Créer un document propre, structurer les paragraphes, mettre en forme le texte et insérer des tableaux ou images.','Rédige une page de présentation de ton établissement avec un titre, deux paragraphes et un tableau.','cours-word'],
+    ['8. Microsoft Excel','Organiser des données dans un tableau, utiliser des formules et fonctions simples, puis présenter les résultats avec un graphique.','Crée un petit tableau de notes et calcule les moyennes avec une formule avant de réaliser un graphique.','cours-excel']
+  ];
+  return '<section class="hero2"><div><h1>Guide d’étude KS INFORMATIQUE</h1><p>Une méthode simple pour apprendre, pratiquer et progresser étape par étape.</p></div></section><div class="panel" style="margin-top:14px"><h3>Comment utiliser ce site ?</h3><ol><li>Choisis un thème dans la page Cours.</li><li>Lis les objectifs et le résumé avant d’étudier les chapitres.</li><li>Lis la leçon, observe les exemples et note les mots nouveaux.</li><li>Fais les exercices sans regarder immédiatement le corrigé.</li><li>Réalise les travaux pratiques sur un ordinateur lorsque le thème le permet.</li><li>Termine par le quiz et consulte tes résultats pour repérer ce qu’il faut revoir.</li></ol></div><h2>Parcours pédagogique</h2><div class="two">'+blocs.map(function(x){return '<article class="pnl"><h3>'+x[0]+'</h3><div><p>'+x[1]+'</p><p><b>Conseil pratique :</b> '+x[2]+'</p><a class="btn alt" href="#'+x[3]+'">Étudier ce thème</a></div></article>';}).join('')+'</div><div class="panel"><h3>Conseils pour réussir</h3><ul class="ck"><li>Étudie régulièrement plutôt que tout apprendre en une seule fois.</li><li>Explique chaque notion avec tes propres mots.</li><li>Fais les manipulations toi-même : la pratique aide à mémoriser.</li><li>Enregistre souvent ton travail et donne des noms clairs à tes fichiers.</li><li>En cas d’erreur, relis le cours, recommence calmement et demande de l’aide si nécessaire.</li></ul></div>';
+}
+var KS_GLOSSAIRE=[
+['Adresse de cellule','Repère formé par la lettre de la colonne et le numéro de la ligne, par exemple B4.','Excel'],
+['Application','Logiciel conçu pour réaliser une tâche précise, comme rédiger un texte ou calculer.','Software'],
+['Barre des tâches','Zone de Windows qui donne accès aux applications ouvertes et à certaines commandes.','Windows'],
+['Bureau','Espace principal affiché après l’ouverture de session Windows.','Windows'],
+['Carte mère','Carte principale qui relie les composants internes de l’ordinateur.','Hardware'],
+['Cellule','Intersection d’une ligne et d’une colonne dans une feuille Excel.','Excel'],
+['Classeur','Fichier Excel qui peut contenir plusieurs feuilles de calcul.','Excel'],
+['Colonne','Ensemble vertical de cellules dans Excel, identifié par une lettre.','Excel'],
+['Composant','Élément matériel ou logiciel participant au fonctionnement d’un système informatique.','Hardware / Software'],
+['CPU / Processeur','Composant qui exécute les instructions et effectue les opérations de calcul.','Hardware'],
+['Donnée','Élément brut qui peut être traité pour produire une information.','Branches'],
+['Dossier','Emplacement qui sert à classer et organiser des fichiers.','Windows'],
+['Fichier','Ensemble d’informations enregistré sous un nom et dans un format donné.','Windows'],
+['Formule','Expression de calcul saisie dans Excel et commençant par le signe égal (=).','Excel'],
+['Graphique','Représentation visuelle de données sous forme de colonnes, courbes ou secteurs.','Excel'],
+['Hardware','Ensemble des éléments physiques d’un ordinateur que l’on peut toucher.','Hardware'],
+['Icône','Petit symbole graphique qui représente un programme, un fichier, un dossier ou une commande.','Windows'],
+['Informatique','Science du traitement automatique et rationnel de l’information.','Histoire / Branches'],
+['Information','Donnée interprétée qui possède un sens pour la personne qui la reçoit.','Branches'],
+['Logiciel','Ensemble de programmes et d’instructions exécutés par un ordinateur.','Software'],
+['Ligne','Ensemble horizontal de cellules dans Excel, identifié par un numéro.','Excel'],
+['Mémoire vive (RAM)','Mémoire temporaire utilisée pendant le fonctionnement de l’ordinateur.','Hardware'],
+['Menu Démarrer','Menu Windows permettant d’accéder aux applications, paramètres et options d’alimentation.','Windows'],
+['Microprocesseur','Circuit intégré qui contient le processeur ou une partie essentielle de son unité de calcul.','Histoire / Hardware'],
+['Périphérique','Appareil relié à l’ordinateur pour saisir, restituer, stocker ou échanger des informations.','Hardware'],
+['Périphérique d’entrée','Appareil qui transmet des données à l’ordinateur, comme le clavier ou la souris.','Hardware'],
+['Périphérique de sortie','Appareil qui restitue les résultats, comme l’écran ou l’imprimante.','Hardware'],
+['Pilote','Logiciel qui permet au système d’exploitation de communiquer avec un périphérique.','Software'],
+['Processeur graphique (GPU)','Composant spécialisé dans le traitement et l’affichage des images.','Hardware'],
+['Système d’exploitation','Logiciel principal qui gère les ressources de l’ordinateur et permet d’utiliser les applications.','Software / Windows'],
+['Stockage','Conservation des fichiers et informations sur un support, par exemple un SSD ou une clé USB.','Hardware'],
+['Tableur','Logiciel organisé en feuilles, lignes et colonnes qui sert à calculer et analyser des données.','Excel'],
+['Traitement de texte','Type de logiciel utilisé pour saisir, corriger et mettre en forme des documents.','Word'],
+['Transistor','Composant électronique qui a contribué à réduire la taille et la consommation des ordinateurs.','Histoire'],
+['Unité centrale','Boîtier qui contient les principaux composants internes d’un ordinateur de bureau.','Hardware'],
+['Virus informatique','Programme malveillant pouvant perturber un appareil ou endommager des données.','Avantages et conséquences']
+];
+function glossaire(){
+  return '<section class="hero2"><div><h1>Glossaire informatique</h1><p>Les mots essentiels du programme expliqués en français simple, avec des exemples.</p></div></section><div class="panel" style="margin-top:14px"><label for="ksGlossSearch"><b>Rechercher un mot</b></label><input id="ksGlossSearch" type="search" placeholder="Ex. : processeur, cellule, dossier…" autocomplete="off"><p class="mut">Les définitions sont classées par ordre alphabétique. Utilise le champ pour filtrer les termes.</p></div><p id="ksGlossCount" class="mut">'+KS_GLOSSAIRE.length+' définitions disponibles</p><div id="ksGlossList" class="two">'+KS_GLOSSAIRE.map(function(x){return '<article class="pnl ks-gloss-item" data-search="'+(x[0]+' '+x[1]+' '+x[2]).toLowerCase().replace(/"/g,'&quot;')+'"><h3>'+x[0]+'</h3><div><p>'+x[1]+'</p><small class="mut">Thème : '+x[2]+'</small></div></article>';}).join('')+'</div>';
+}
+
 function render(){
   var r=(location.hash||'#accueil').slice(1),nav='accueil',v;
   if(r.indexOf('cours-')===0&&M[r.slice(6)]){v=course(r.slice(6));nav='cours';}
   else if(r==='cours'){v=catalog();nav='cours';}
+  else if(r==='guide'){v=guideEtude();nav='guide';}
+  else if(r==='glossaire'){v=glossaire();nav='glossaire';}
   else if(r==='videos'){v=videos();nav='videos';}
   else if(r.indexOf('quiz-')===0&&QZ[r.slice(5)]){v=quiz(r.slice(5));nav='quiz';}
   else if(r==='quiz'){v=quizMenu();nav='quiz';}
@@ -517,7 +575,7 @@ g('app').addEventListener('click',function(e){
   else if(t.dataset.done){var a=done[k]||[],i=a.indexOf(ch);if(i>-1)a.splice(i,1);else a.push(ch);done[k]=a;save();render();}
   else if(t.classList.contains('rv')){var q=t.parentNode.querySelector('.an');q.classList.toggle('s');t.textContent=q.classList.contains('s')?'Masquer':'Voir le corrigé';}
 });
-g('app').addEventListener('input',function(e){if(e.target.id!=='cn'&&e.target.id!=='cm')return;var t=encodeURIComponent(cl(g('cn').value.trim(),g('cm').value.trim()));g('cw').href='https://wa.me/224624460422?text='+t;g('ce').href='mailto:siakakebe22@gmail.com?subject='+encodeURIComponent('Message KS INFORMATIQUE')+'&body='+t;});
+g('app').addEventListener('input',function(e){if(e.target.id==='ksGlossSearch'){var q=e.target.value.toLowerCase().trim(),items=g('ksGlossList').querySelectorAll('.ks-gloss-item'),count=0;items.forEach(function(el){var ok=el.dataset.search.indexOf(q)>-1;el.style.display=ok?'':'none';if(ok)count++;});g('ksGlossCount').textContent=count+' définition(s) trouvée(s)';return;} if(e.target.id!=='cn'&&e.target.id!=='cm')return;var t=encodeURIComponent(cl(g('cn').value.trim(),g('cm').value.trim()));g('cw').href='https://wa.me/224624460422?text='+t;g('ce').href='mailto:siakakebe22@gmail.com?subject='+encodeURIComponent('Message KS INFORMATIQUE')+'&body='+t;});
 g('app').addEventListener('change',function(e){var c=e.target;if(c.dataset.tp===undefined)return;var i=c.dataset.tp,a=tp[i]||[];a[+c.dataset.s]=c.checked;tp[i]=a;try{localStorage.setItem('ks-tp',JSON.stringify(tp));var uid=localStorage.getItem('ks-tp-active-user');if(uid)localStorage.setItem('ks-tp-user-'+uid,JSON.stringify(tp));}catch(x){}g('c'+i).textContent=a.filter(Boolean).length+'/'+TPS[i][1].length;if(typeof ksSyncTP==='function')ksSyncTP();});
 window.addEventListener('hashchange',function(){ch=0;rvs=0;render();window.scrollTo(0,0);});
 render();

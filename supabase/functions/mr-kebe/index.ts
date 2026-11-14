@@ -136,29 +136,40 @@ Deno.serve(async (req: Request) => {
 
     const freeResearch = await searchFreeSources(message);
 
-    const response = await fetch(
-      "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent",
-      {
+    const geminiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent";
+    const geminiPayload = {
+      systemInstruction: {
+        parts: [{ text: instructions }],
+      },
+      contents: [{
+        role: "user",
+        parts: [{ text: `Question de l’élève : ${message}\n\n${freeResearch}` }],
+      }],
+      generationConfig: {
+        temperature: 0.4,
+        maxOutputTokens: 1200,
+      },
+    };
+
+    // Gemini peut être temporairement surchargé. Réessayer jusqu'à 3 fois.
+    let response: Response;
+    for (let attempt = 0; attempt < 3; attempt++) {
+      response = await fetch(geminiUrl, {
         method: "POST",
         headers: {
           "x-goog-api-key": apiKey,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          systemInstruction: {
-            parts: [{ text: instructions }],
-          },
-          contents: [{
-            role: "user",
-            parts: [{ text: `Question de l’élève : ${message}\n\n${freeResearch}` }],
-          }],
-          generationConfig: {
-            temperature: 0.4,
-            maxOutputTokens: 1200,
-          },
-        }),
-      },
-    );
+        body: JSON.stringify(geminiPayload),
+      });
+
+      if (response.ok || ![429, 500, 502, 503, 504].includes(response.status) || attempt === 2) {
+        break;
+      }
+
+      console.warn(`Gemini temporairement indisponible (HTTP ${response.status}). Nouvelle tentative ${attempt + 1}/2.`);
+      await new Promise((resolve) => setTimeout(resolve, 900 * (attempt + 1)));
+    }
 
     const data = await response.json();
 

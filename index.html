@@ -89,6 +89,74 @@ p{margin:0 0 12px}.mut{color:var(--mut);margin:4px 0 0}
 .gal{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0}@media(min-width:640px){.gal{grid-template-columns:repeat(3,1fr)}}.gal figure{margin:0;background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}.fi{background:#EEF0FA;display:grid;place-items:center;padding:8px;min-height:96px}.fi svg{width:100%;max-width:130px;height:auto}.fi img{width:100%;max-width:170px;height:auto;border-radius:6px}.gal figcaption{padding:8px 10px;font-size:.85rem;line-height:1.3;color:var(--mut)}.gal figcaption b{color:var(--ink)}.gal figure.w{grid-column:1/-1}.fi img.big{max-width:420px}
 footer{background:var(--pu);color:#fff;padding:18px 16px 24px;font-size:.92rem}footer div{max-width:1100px;margin:0 auto}footer em{color:var(--ye);font-weight:700}
 .btn:focus-visible,.chc:focus-visible,a:focus-visible,.opt:focus-visible,.rv:focus-visible,.rl:focus-visible{outline:3px solid var(--ye);outline-offset:2px}
+
+/* Adaptation complète aux téléphones, tablettes et ordinateurs */
+html{width:100%;max-width:100%;overflow-x:hidden}
+body{width:100%;max-width:100%;overflow-x:hidden}
+#app,main,.lay,.lay>*{min-width:0;max-width:100%}
+img,svg,video,canvas,iframe{max-width:100%}
+p,li,h1,h2,h3,h4,small,b,a,span{overflow-wrap:anywhere}
+button,.btn{max-width:100%;white-space:normal}
+input,select,textarea{max-width:100%;min-width:0}
+table{max-width:100%;display:block;overflow-x:auto}
+.bar,.nv,main,footer div{width:100%;min-width:0}
+.hero,.hero2,.panel,.pnl,.cert,.cc,.prof{min-width:0}
+@media(max-width:979px){
+  main{padding:14px 12px 32px}
+  .lay{grid-template-columns:minmax(0,1fr)}
+  .side{position:relative;top:auto;max-height:none;max-width:100%;min-width:0}
+  .side a{white-space:normal;max-width:78vw}
+  .lay> :nth-child(2){min-width:0;width:100%}
+}
+@media(max-width:600px){
+  body{font-size:15px;line-height:1.5}
+  .bar{gap:9px;padding:9px 12px}
+  .bar b{font-size:1rem}
+  .bar small{font-size:.72rem;line-height:1.25;display:block}
+  .lg{width:40px;height:40px}
+  .nv{padding:0 4px;scrollbar-width:thin}
+  .nv a,.nv span{padding:9px 11px;font-size:.84rem}
+  main{padding:12px 10px 28px}
+  h2{font-size:1.18rem;margin:19px 0 10px}
+  .hero{padding:20px 14px;border-radius:12px}
+  .hero h1{font-size:1.45rem}
+  .hero2{padding:15px 12px;border-radius:12px}
+  .hero2 h1{font-size:1.4rem}
+  .grid,.chs{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .dom{padding:11px 8px}
+  .dom b{font-size:.86rem}
+  .dom small{font-size:.75rem}
+  .side{border-radius:10px}
+  .side a{font-size:.82rem;padding:9px 10px;max-width:72vw}
+  .panel{padding:14px 12px}
+  .pnl>div{padding:10px}
+  .cc{padding:11px;gap:9px}
+  .cc>svg{width:36px;height:36px}
+  .prof{gap:10px;padding:10px}
+  .prof img{width:54px;height:54px}
+  .btn{padding:9px 14px;font-size:.92rem}
+  .step{flex-wrap:wrap}
+  .step .btn{min-width:100%}
+  .tb td{padding:5px;font-size:.86rem}
+  .tb td:first-child{white-space:normal}
+  .pills{max-width:100%;padding-bottom:4px}
+  .gal{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  footer{padding:15px 12px 20px;font-size:.82rem}
+}
+@media(max-width:360px){
+  body{font-size:14px}
+  .bar b{font-size:.9rem}
+  .bar small{font-size:.66rem}
+  .grid,.chs,.gal{grid-template-columns:minmax(0,1fr)}
+  .hero h1,.hero2 h1{font-size:1.25rem}
+  .side a{max-width:68vw}
+}
+@media(min-width:1200px){
+  main{max-width:1280px;padding-left:24px;padding-right:24px}
+  .bar,.nv,footer div{max-width:1280px}
+  .lay{gap:20px}
+}
+
 </style>
 </head>
 <body>

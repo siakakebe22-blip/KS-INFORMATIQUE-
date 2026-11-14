@@ -174,12 +174,6 @@ Deno.serve(async (req: Request) => {
       .filter(Boolean)
       .join("\n");
 
-    const answer = data.output_text || (data.output ?? [])
-      .flatMap((item: any) => item.content ?? [])
-      .filter((part: any) => part.type === "output_text")
-      .map((part: any) => part.text)
-      .join("\n");
-
     return new Response(JSON.stringify({
       answer: answer || "Je n’ai pas pu préparer une réponse. Reformule ta question.",
     }), { status: 200, headers: jsonHeaders });

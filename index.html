@@ -880,6 +880,29 @@ document.getElementById("ksLogin").addEventListener("submit", async function(e) 
 #mrKebeSend{border:0;border-radius:10px;background:#FFD21F;color:#1B1433;font-weight:800;padding:0 14px;cursor:pointer}
 #mrKebeSend:disabled{opacity:.55;cursor:wait}
 @media(max-width:480px){#mrKebePanel{right:8px;bottom:76px;width:calc(100vw - 16px);height:min(72dvh,560px)}#mrKebeLauncher{right:12px;bottom:12px}}
+/* MR KEBE : fenêtre flottante avec apparition fluide */
+#mrKebePanel{
+  display:flex;
+  visibility:hidden;
+  opacity:0;
+  transform:translateY(18px) scale(.98);
+  transform-origin:bottom right;
+  pointer-events:none;
+  transition:opacity .22s ease,transform .22s ease,visibility .22s ease;
+  will-change:opacity,transform;
+}
+#mrKebePanel.open{
+  display:flex;
+  visibility:visible;
+  opacity:1;
+  transform:translateY(0) scale(1);
+  pointer-events:auto;
+}
+#mrKebeLauncher{transition:transform .18s ease,box-shadow .18s ease}
+#mrKebeLauncher:active{transform:scale(.96)}
+@media(prefers-reduced-motion:reduce){
+  #mrKebePanel,#mrKebeLauncher{transition:none}
+}
 </style>
 <script>
 (function(){
@@ -909,6 +932,20 @@ document.getElementById("ksLogin").addEventListener("submit", async function(e) 
   var form = panel.querySelector("#mrKebeForm");
   var input = panel.querySelector("#mrKebeInput");
   var send = panel.querySelector("#mrKebeSend");
+
+  function cleanMrKebeAnswer(value){
+    return String(value || "")
+      .replace(/\\r/g, "")
+      .replace(/^\\s{0,3}#{1,6}\\s*/gm, "")
+      .replace(/\\*\\*(.*?)\\*\\*/g, "$1")
+      .replace(/__(.*?)__/g, "$1")
+      .replace(/(?<!\\*)\\*([^*]+)\\*(?!\\*)/g, "$1")
+      .replace(/_([^_]+)_/g, "$1")
+      .replace(/^\\s*[-*+]\\s+/gm, "• ")
+      .replace(/^\\s*>\\s?/gm, "")
+      .replace(/\\n{3,}/g, "\\n\\n")
+      .trim();
+  }
 
   function addMessage(text, who){
     var bubble = document.createElement("div");
@@ -947,7 +984,7 @@ document.getElementById("ksLogin").addEventListener("submit", async function(e) 
       var result = await supabaseClient.functions.invoke("mr-kebe-",{body:{message:question}});
       if(result.error) throw result.error;
       if(result.data && result.data.error) throw new Error(result.data.error);
-      waiting.textContent = (result.data && result.data.answer) || "Je n’ai pas reçu de réponse. Réessaie.";
+      waiting.textContent = cleanMrKebeAnswer((result.data && result.data.answer) || "Je n’ai pas reçu de réponse. Réessaie.");
     }catch(error){
       console.error("MR KEBE:",error);
       waiting.textContent = "Je n’arrive pas à répondre pour le moment. Vérifie ta connexion ou réessaie plus tard.";

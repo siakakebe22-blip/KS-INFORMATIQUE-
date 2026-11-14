@@ -863,45 +863,91 @@ document.getElementById("ksLogin").addEventListener("submit", async function(e) 
 </script>
 
 <style>
-#mrKebeLauncher{position:fixed;right:18px;bottom:18px;z-index:9998;border:0;border-radius:999px;background:#3F1D8F;color:#fff;padding:10px 16px 10px 10px;display:flex;align-items:center;gap:10px;box-shadow:0 5px 22px #21104455;font:700 15px system-ui;cursor:pointer}
-#mrKebeLauncher img{width:42px;height:42px;border-radius:50%;object-fit:cover;border:2px solid #FFD21F}
-#mrKebePanel{position:fixed;right:16px;bottom:84px;z-index:9999;width:min(370px,calc(100vw - 24px));height:min(540px,calc(100dvh - 110px));background:var(--card,#fff);color:var(--ink,#1B1433);border:1px solid var(--line,#DDD6F0);border-radius:18px;box-shadow:0 12px 40px #14072b55;display:none;overflow:hidden;flex-direction:column}
-#mrKebePanel.open{display:flex}
-#mrKebeHead{background:#3F1D8F;color:#fff;padding:11px 13px;display:flex;align-items:center;gap:10px}
-#mrKebeHead img{width:42px;height:42px;border-radius:50%;object-fit:cover;border:2px solid #FFD21F}
-#mrKebeHead strong{display:block}#mrKebeHead small{color:#FFD21F}
-#mrKebeClose{margin-left:auto;background:transparent;color:#fff;border:0;font-size:25px;cursor:pointer}
-#mrKebeMessages{padding:12px;overflow-y:auto;flex:1;display:flex;flex-direction:column;gap:9px}
-.mr-kebe-msg{max-width:88%;padding:10px 12px;border-radius:13px;white-space:pre-wrap;overflow-wrap:anywhere;font-size:14px;line-height:1.45}
-.mr-kebe-msg.bot{align-self:flex-start;background:var(--bg,#F3F0FB);border:1px solid var(--line,#DDD6F0)}
-.mr-kebe-msg.user{align-self:flex-end;background:#5B2DB8;color:#fff}
-#mrKebeForm{padding:10px;border-top:1px solid var(--line,#DDD6F0);display:flex;gap:7px}
-#mrKebeInput{margin:0;min-width:0;flex:1;font-size:14px}
-#mrKebeSend{border:0;border-radius:10px;background:#FFD21F;color:#1B1433;font-weight:800;padding:0 14px;cursor:pointer}
-#mrKebeSend:disabled{opacity:.55;cursor:wait}
-@media(max-width:480px){#mrKebePanel{right:8px;bottom:76px;width:calc(100vw - 16px);height:min(72dvh,560px)}#mrKebeLauncher{right:12px;bottom:12px}}
-/* MR KEBE : fenêtre flottante avec apparition fluide */
+/* MR KEBE — bouton flottant */
+#mrKebeLauncher{
+  position:fixed;right:18px;bottom:18px;z-index:9998;
+  display:flex;align-items:center;gap:10px;
+  max-width:calc(100vw - 24px);
+  padding:10px 16px 10px 10px;border:0;border-radius:999px;
+  background:#3F1D8F;color:#fff;
+  box-shadow:0 7px 26px #21104455;
+  font:700 15px system-ui,sans-serif;cursor:pointer;
+  transition:transform .2s ease,box-shadow .2s ease;
+  -webkit-tap-highlight-color:transparent;
+}
+#mrKebeLauncher:hover{transform:translateY(-2px);box-shadow:0 10px 30px #21104466}
+#mrKebeLauncher:active{transform:scale(.97)}
+#mrKebeLauncher img{width:42px;height:42px;flex:none;border-radius:50%;object-fit:cover;border:2px solid #FFD21F}
+
+/* Fenêtre flottante — animation douce sans display:none */
 #mrKebePanel{
-  display:flex;
-  visibility:hidden;
-  opacity:0;
-  transform:translateY(18px) scale(.98);
+  position:fixed;right:16px;bottom:84px;z-index:9999;
+  display:flex;flex-direction:column;overflow:hidden;
+  width:min(390px,calc(100vw - 24px));
+  height:min(620px,calc(100dvh - 112px));
+  max-height:calc(100dvh - 100px);
+  background:var(--card,#fff);color:var(--ink,#1B1433);
+  border:1px solid var(--line,#DDD6F0);border-radius:20px;
+  box-shadow:0 16px 48px #14072b44;
+  opacity:0;visibility:hidden;pointer-events:none;
+  transform:translate3d(0,18px,0) scale(.985);
   transform-origin:bottom right;
-  pointer-events:none;
-  transition:opacity .22s ease,transform .22s ease,visibility .22s ease;
+  transition:opacity .24s ease,transform .24s cubic-bezier(.2,.75,.25,1),visibility 0s linear .24s;
   will-change:opacity,transform;
 }
 #mrKebePanel.open{
-  display:flex;
-  visibility:visible;
-  opacity:1;
-  transform:translateY(0) scale(1);
-  pointer-events:auto;
+  opacity:1;visibility:visible;pointer-events:auto;
+  transform:translate3d(0,0,0) scale(1);
+  transition:opacity .24s ease,transform .24s cubic-bezier(.2,.75,.25,1),visibility 0s;
 }
-#mrKebeLauncher{transition:transform .18s ease,box-shadow .18s ease}
-#mrKebeLauncher:active{transform:scale(.96)}
+#mrKebeHead{
+  flex:none;background:#3F1D8F;color:#fff;padding:12px 14px;
+  display:flex;align-items:center;gap:10px;
+}
+#mrKebeHead img{width:42px;height:42px;flex:none;border-radius:50%;object-fit:cover;border:2px solid #FFD21F}
+#mrKebeHead strong{display:block;font-size:15px}
+#mrKebeHead small{color:#FFD21F;font-size:11px}
+#mrKebeClose{
+  margin-left:auto;width:38px;height:38px;flex:none;
+  display:grid;place-items:center;border:0;border-radius:50%;
+  background:#ffffff18;color:#fff;font-size:25px;cursor:pointer;
+}
+#mrKebeMessages{
+  padding:14px;overflow-y:auto;overscroll-behavior:contain;
+  flex:1;min-height:0;display:flex;flex-direction:column;gap:10px;
+  scroll-behavior:smooth;-webkit-overflow-scrolling:touch;
+}
+.mr-kebe-msg{
+  max-width:88%;padding:11px 13px;border-radius:14px;
+  white-space:pre-wrap;overflow-wrap:anywhere;font-size:14px;line-height:1.55;
+}
+.mr-kebe-msg.bot{align-self:flex-start;background:var(--bg,#F3F0FB);border:1px solid var(--line,#DDD6F0)}
+.mr-kebe-msg.user{align-self:flex-end;background:#5B2DB8;color:#fff}
+#mrKebeForm{
+  flex:none;padding:11px;border-top:1px solid var(--line,#DDD6F0);
+  display:flex;align-items:stretch;gap:8px;background:var(--card,#fff);
+}
+#mrKebeInput{margin:0;min-width:0;min-height:44px;flex:1;font-size:14px}
+#mrKebeSend{
+  flex:none;min-height:44px;border:0;border-radius:11px;
+  background:#FFD21F;color:#1B1433;font-weight:800;padding:0 15px;cursor:pointer;
+}
+#mrKebeSend:disabled{opacity:.55;cursor:wait}
+#mrKebeLauncher:focus-visible,#mrKebeClose:focus-visible,#mrKebeSend:focus-visible,#mrKebeInput:focus-visible{
+  outline:3px solid #FFD21F;outline-offset:2px;
+}
+@media(max-width:480px){
+  #mrKebeLauncher{right:12px;bottom:calc(12px + env(safe-area-inset-bottom))}
+  #mrKebePanel{
+    right:8px;bottom:calc(76px + env(safe-area-inset-bottom));
+    width:calc(100vw - 16px);
+    height:min(620px,calc(100dvh - 96px - env(safe-area-inset-bottom)));
+    max-height:calc(100dvh - 88px - env(safe-area-inset-bottom));
+    border-radius:18px;
+  }
+}
 @media(prefers-reduced-motion:reduce){
-  #mrKebePanel,#mrKebeLauncher{transition:none}
+  #mrKebePanel,#mrKebeLauncher{transition:none;scroll-behavior:auto}
 }
 </style>
 <script>
@@ -957,8 +1003,17 @@ document.getElementById("ksLogin").addEventListener("submit", async function(e) 
 
   addMessage("Bonjour ! Je suis MR KEBE, ton professeur virtuel. Je peux t’aider sur les huit thèmes du programme KS INFORMATIQUE : histoire, branches, avantages et conséquences, Hardware, Software, Windows, Word et Excel.", "bot");
 
-  launcher.addEventListener("click",function(){panel.classList.toggle("open");if(panel.classList.contains("open"))input.focus();});
-  panel.querySelector("#mrKebeClose").addEventListener("click",function(){panel.classList.remove("open");});
+  launcher.setAttribute("aria-expanded","false");
+  launcher.addEventListener("click",function(){
+    var isOpen=panel.classList.toggle("open");
+    launcher.setAttribute("aria-expanded",String(isOpen));
+    if(isOpen) input.focus();
+  });
+  panel.querySelector("#mrKebeClose").addEventListener("click",function(){
+    panel.classList.remove("open");
+    launcher.setAttribute("aria-expanded","false");
+    launcher.focus();
+  });
 
   form.addEventListener("submit",async function(event){
     event.preventDefault();

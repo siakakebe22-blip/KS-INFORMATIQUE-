@@ -948,7 +948,7 @@ document.getElementById("ksLogin").addEventListener("submit", async function(e) 
   flex:none;padding:11px;border-top:1px solid var(--line,#DDD6F0);
   display:flex;align-items:stretch;gap:8px;background:var(--card,#fff);
 }
-#mrKebeInput{margin:0;min-width:0;min-height:44px;flex:1;font-size:14px}
+#mrKebeInput{margin:0;min-width:0;min-height:44px;flex:1;font-size:16px}
 #mrKebeSend{
   flex:none;min-height:44px;border:0;border-radius:11px;
   background:#FFD21F;color:#1B1433;font-weight:800;padding:0 15px;cursor:pointer;
@@ -1028,7 +1028,7 @@ document.getElementById("ksLogin").addEventListener("submit", async function(e) 
   launcher.addEventListener("click",function(){
     var isOpen=panel.classList.toggle("open");
     launcher.setAttribute("aria-expanded",String(isOpen));
-    if(isOpen) input.focus();
+    // Ne pas focaliser automatiquement le champ à l’ouverture : cela déclenche le zoom mobile et le clavier.
   });
   panel.querySelector("#mrKebeClose").addEventListener("click",function(){
     panel.classList.remove("open");

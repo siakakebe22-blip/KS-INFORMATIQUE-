@@ -138,7 +138,7 @@ Deno.serve(async (req: Request) => {
 
     const freeResearch = await searchFreeSources(message);
 
-    const geminiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent";
+    const geminiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent";
     const geminiPayload = {
       systemInstruction: {
         parts: [{ text: instructions }],
@@ -155,7 +155,7 @@ Deno.serve(async (req: Request) => {
 
     // Limiter strictement le temps d'attente pour éviter l'arrêt de la fonction par Supabase.
     let response: Response | null = null;
-    for (let attempt = 0; attempt < 2; attempt++) {
+    for (let attempt = 0; attempt < 1; attempt++) {
       try {
         response = await fetch(geminiUrl, {
           method: "POST",
@@ -164,11 +164,11 @@ Deno.serve(async (req: Request) => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(geminiPayload),
-          signal: AbortSignal.timeout(25000),
+          signal: AbortSignal.timeout(15000),
         });
       } catch (error) {
         console.error("Gemini timeout ou erreur réseau:", error);
-        if (attempt === 1) {
+        if (attempt === 0) {
           return new Response(JSON.stringify({
             error: "Gemini met trop de temps à répondre. Réessaie dans quelques instants.",
           }), { status: 504, headers: jsonHeaders });
@@ -179,9 +179,8 @@ Deno.serve(async (req: Request) => {
         break;
       }
 
-      if (attempt === 0) {
-        console.warn("Gemini temporairement indisponible. Une seule nouvelle tentative.");
-        await new Promise((resolve) => setTimeout(resolve, 700));
+      if (attempt === 0 && !response) {
+        console.warn("Gemini indisponible : pas de nouvelle tentative pour préserver le délai.");
       }
     }
 

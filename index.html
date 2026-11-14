@@ -1017,45 +1017,74 @@ document.getElementById("ksLogin").addEventListener("submit", async function(e) 
     launcher.focus();
   });
 
-  // Déplacement indépendant de la fenêtre MR KEBE (la page KS reste immobile)
+  // Déplacement de MR KEBE : tactile Android + souris, sans déplacer la page
   var dragHead=panel.querySelector("#mrKebeHead");
   var dragState=null;
   dragHead.style.touchAction="none";
-  dragHead.addEventListener("pointerdown",function(event){
-    if(!panel.classList.contains("open") || event.target.closest("#mrKebeClose")) return;
-    if(event.pointerType==="mouse" && event.button!==0) return;
+
+  function beginMrKebeDrag(x,y,id){
     var rect=panel.getBoundingClientRect();
-    dragState={id:event.pointerId,x:event.clientX,y:event.clientY,left:rect.left,top:rect.top};
+    dragState={x:x,y:y,left:rect.left,top:rect.top,id:id};
     panel.style.left=rect.left+"px";
     panel.style.top=rect.top+"px";
     panel.style.right="auto";
     panel.style.bottom="auto";
     panel.style.transform="none";
-    try{dragHead.setPointerCapture(event.pointerId);}catch(e){}
-    event.preventDefault();
-  });
-  window.addEventListener("pointermove",function(event){
-    if(!dragState || dragState.id!==event.pointerId) return;
+  }
+  function moveMrKebeDrag(x,y){
+    if(!dragState) return;
     var maxLeft=Math.max(0,window.innerWidth-panel.offsetWidth);
     var maxTop=Math.max(0,window.innerHeight-panel.offsetHeight);
-    var left=Math.min(maxLeft,Math.max(0,dragState.left+event.clientX-dragState.x));
-    var top=Math.min(maxTop,Math.max(0,dragState.top+event.clientY-dragState.y));
-    panel.style.left=left+"px";
-    panel.style.top=top+"px";
-    event.preventDefault();
-  },{passive:false});
-  function stopMrKebeDrag(event){
-    if(dragState && (!event || dragState.id===event.pointerId)) dragState=null;
+    panel.style.left=Math.min(maxLeft,Math.max(0,dragState.left+x-dragState.x))+"px";
+    panel.style.top=Math.min(maxTop,Math.max(0,dragState.top+y-dragState.y))+"px";
   }
-  window.addEventListener("pointerup",stopMrKebeDrag);
-  window.addEventListener("pointercancel",stopMrKebeDrag);
-  dragHead.addEventListener("lostpointercapture",stopMrKebeDrag);
+
+  // Android / iPhone : événements tactiles natifs
+  dragHead.addEventListener("touchstart",function(e){
+    if(!panel.classList.contains("open") || e.target.closest("#mrKebeClose")) return;
+    var t=e.changedTouches[0];
+    beginMrKebeDrag(t.clientX,t.clientY,t.identifier);
+    e.preventDefault();
+  },{passive:false});
+  window.addEventListener("touchmove",function(e){
+    if(!dragState) return;
+    for(var i=0;i<e.changedTouches.length;i++){
+      var t=e.changedTouches[i];
+      if(t.identifier===dragState.id){
+        moveMrKebeDrag(t.clientX,t.clientY);
+        e.preventDefault();
+        break;
+      }
+    }
+  },{passive:false});
+  function endMrKebeTouch(e){
+    if(!dragState) return;
+    for(var i=0;i<e.changedTouches.length;i++){
+      if(e.changedTouches[i].identifier===dragState.id){dragState=null;break;}
+    }
+  }
+  window.addEventListener("touchend",endMrKebeTouch);
+  window.addEventListener("touchcancel",endMrKebeTouch);
+
+  // Ordinateur : déplacement à la souris
+  dragHead.addEventListener("pointerdown",function(e){
+    if(e.pointerType==="touch" || !panel.classList.contains("open") || e.button!==0 || e.target.closest("#mrKebeClose")) return;
+    beginMrKebeDrag(e.clientX,e.clientY,e.pointerId);
+    try{dragHead.setPointerCapture(e.pointerId);}catch(err){}
+    e.preventDefault();
+  });
+  dragHead.addEventListener("pointermove",function(e){
+    if(!dragState || e.pointerType==="touch" || dragState.id!==e.pointerId) return;
+    moveMrKebeDrag(e.clientX,e.clientY);
+  });
+  function endMrKebePointer(e){if(dragState && dragState.id===e.pointerId) dragState=null;}
+  dragHead.addEventListener("pointerup",endMrKebePointer);
+  dragHead.addEventListener("pointercancel",endMrKebePointer);
+
   window.addEventListener("resize",function(){
     if(!panel.style.left || !panel.style.top) return;
-    var maxLeft=Math.max(0,window.innerWidth-panel.offsetWidth);
-    var maxTop=Math.max(0,window.innerHeight-panel.offsetHeight);
-    panel.style.left=Math.min(maxLeft,Math.max(0,parseFloat(panel.style.left)||0))+"px";
-    panel.style.top=Math.min(maxTop,Math.max(0,parseFloat(panel.style.top)||0))+"px";
+    panel.style.left=Math.min(Math.max(0,window.innerWidth-panel.offsetWidth),Math.max(0,parseFloat(panel.style.left)||0))+"px";
+    panel.style.top=Math.min(Math.max(0,window.innerHeight-panel.offsetHeight),Math.max(0,parseFloat(panel.style.top)||0))+"px";
   });
 
   form.addEventListener("submit",async function(event){

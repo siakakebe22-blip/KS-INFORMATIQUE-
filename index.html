@@ -170,7 +170,7 @@ table{max-width:100%;display:block;overflow-x:auto}
 <header class="top">
 <div class="bar"><img class="lg" id="logo" alt="Logo du Complexe Scolaire KS" width="46" height="46">
 <div><b>KS INFORMATIQUE</b><small>Complexe Scolaire KS · Apprendre, comprendre, réussir</small></div></div>
-<nav><div class="nv" id="nv"><a href="#accueil">Accueil</a><a href="#cours">Cours</a><a href="#quiz">Quiz</a><a href="#resultats">Résultats</a><a href="#profil">Mon espace</a><a href="#ressources">Ressources</a><a href="#apropos">À propos</a><a href="#contact">Contact</a></div></nav>
+<nav><div class="nv" id="nv"><a href="#accueil">Accueil</a><a href="#cours">Cours</a><a href="#videos">Vidéos</a><a href="#quiz">Quiz</a><a href="#resultats">Résultats</a><a href="#profil">Mon espace</a><a href="#ressources">Ressources</a><a href="#apropos">À propos</a><a href="#contact">Contact</a></div></nav>
 </header>
 <main id="app"></main>
 <footer><div>Complexe Scolaire KS – Conakry, Guinée<br>siakakebe22@gmail.com – WhatsApp : +224 624 46 04 22<br>www.ks-informatique.fr<br><em>Ensemble, construisons votre réussite !</em></div></footer>
@@ -452,10 +452,27 @@ function gal(k){return '<div class="gal">'+GAL[k].map(function(x){var im=x[0].in
 function apropos(){return '<h2 style="margin-top:8px">À propos</h2><div class="prof"><img src="'+PIC.prof+'" alt="Portrait du professeur"><div><b>SIAKA KEBE</b><br>Professeur d’informatique<br><span>Complexe Scolaire KS</span></div></div><div class="panel" style="margin-top:14px"><h3>Notre mission</h3><p>L’informatique est présente dans l’éducation, la médecine, les banques, le commerce, les transports et l’administration. KS INFORMATIQUE donne aux élèves du collège et du lycée les connaissances théoriques et pratiques pour comprendre l’informatique et utiliser correctement un ordinateur.</p></div><div class="pnl"><h3>À la fin de la formation, l’élève sait…</h3><div><ul class="ck"><li>Définir l’informatique et expliquer ses branches.</li><li>Identifier les composantes d’un environnement informatique.</li><li>Comprendre le fonctionnement général de Windows.</li><li>Manipuler les fichiers et les dossiers.</li><li>Utiliser Word pour créer et mettre en forme des documents.</li><li>Utiliser Excel pour effectuer des calculs.</li><li>Créer une présentation PowerPoint avec images, graphiques et animations.</li><li>Construire des tableaux, des graphiques et des bulletins de notes.</li></ul></div></div><div class="panel"><h3>Notre devise</h3><p><b>Travail, Rigueur, Réussite.</b> L’excellence par la connaissance et la pratique.</p></div><p><a class="btn" href="#contact">Contacter le professeur</a></p>';}
 function cl(n,m){return 'Bonjour Professeur,'+(n?' je suis '+n+'.':'')+(m?'\n'+m:'');}
 function contact(){var t=encodeURIComponent(cl(nm(),''));return '<h2 style="margin-top:8px">Contacter le professeur</h2><div class="panel"><label for="cn"><b>Votre nom</b></label><input id="cn" value="'+nm().replace(/&/g,'&amp;').replace(/"/g,'&quot;')+'" autocomplete="name"><label for="cm"><b>Votre message</b></label><textarea id="cm" rows="4" style="width:100%;font:inherit;padding:10px;border:2px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);margin:6px 0 10px"></textarea><p><a class="btn" id="cw" target="_blank" rel="noopener" href="https://wa.me/224624460422?text='+t+'">Envoyer par WhatsApp</a> <a class="btn alt" id="ce" href="mailto:siakakebe22@gmail.com?subject='+encodeURIComponent('Message KS INFORMATIQUE')+'&body='+t+'">Envoyer par e-mail</a></p></div><div class="pnl"><h3>Coordonnées</h3><div><a class="rl" href="tel:+224624460422">Appeler : +224 624 46 04 22</a><a class="rl" href="mailto:siakakebe22@gmail.com">siakakebe22@gmail.com</a><span class="rl">Complexe Scolaire KS – Conakry, Guinée</span></div></div>';}
+function videos(){
+  var items=[
+    ['histoire','Histoire de l’informatique','https://www.youtube.com/results?search_query=histoire+de+linformatique+cours+en+francais'],
+    ['branches','Les branches de l’informatique','https://www.youtube.com/results?search_query=branches+de+linformatique+cours+en+francais'],
+    ['avantages','Avantages et conséquences','https://www.youtube.com/results?search_query=avantages+et+inconvenients+de+linformatique+cours'],
+    ['hardware','Hardware : matériel informatique','https://www.youtube.com/results?search_query=hardware+composants+ordinateur+cours+francais'],
+    ['software','Software : logiciels','https://www.youtube.com/results?search_query=software+logiciels+systeme+application+cours+francais'],
+    ['windows','Windows','https://www.youtube.com/results?search_query=debuter+sur+windows+cours+informatique+francais'],
+    ['word','Microsoft Word','https://www.youtube.com/watch?v=aZ-SY0ORaoA'],
+    ['excel','Microsoft Excel','https://www.youtube.com/watch?v=aZ-SY0ORaoA']
+  ];
+  return '<h2 style="margin-top:8px">🎬 Vidéos pédagogiques</h2><p class="mut">Choisissez un thème pour découvrir des explications en vidéo sur YouTube. Une connexion Internet est nécessaire.</p><div class="two">'+items.map(function(x){
+    var title=x[1],link=x[2],desc=(x[0]==='word'?'Formation gratuite pour débuter avec Word':x[0]==='excel'?'Formation gratuite sur les bases d’Excel':'Rechercher des vidéos explicatives en français');
+    return '<div class="pnl"><h3>'+title+'</h3><div><p>'+desc+'</p><a class="btn alt" href="'+link+'" target="_blank" rel="noopener">▶ Voir les vidéos</a></div></div>';
+  }).join('')+'</div><div class="panel"><b>Conseil aux élèves :</b><p>Regardez la vidéo du thème étudié, prenez des notes et reproduisez les manipulations sur votre ordinateur.</p></div>';
+}
 function render(){
   var r=(location.hash||'#accueil').slice(1),nav='accueil',v;
   if(r.indexOf('cours-')===0&&M[r.slice(6)]){v=course(r.slice(6));nav='cours';}
   else if(r==='cours'){v=catalog();nav='cours';}
+  else if(r==='videos'){v=videos();nav='videos';}
   else if(r.indexOf('quiz-')===0&&QZ[r.slice(5)]){v=quiz(r.slice(5));nav='quiz';}
   else if(r==='quiz'){v=quizMenu();nav='quiz';}
   else if(r==='resultats'){v=results();nav='resultats';}

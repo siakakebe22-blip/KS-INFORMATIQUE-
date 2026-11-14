@@ -944,7 +944,7 @@ document.getElementById("ksLogin").addEventListener("submit", async function(e) 
         waiting.textContent = "Pour utiliser MR KEBE, connecte-toi d’abord à ton compte élève KS.";
         return;
       }
-      var result = await supabaseClient.functions.invoke("mr-kebe",{body:{message:question}});
+      var result = await supabaseClient.functions.invoke("mr-kebe-",{body:{message:question}});
       if(result.error) throw result.error;
       if(result.data && result.data.error) throw new Error(result.data.error);
       waiting.textContent = (result.data && result.data.answer) || "Je n’ai pas reçu de réponse. Réessaie.";

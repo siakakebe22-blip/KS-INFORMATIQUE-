@@ -18,6 +18,11 @@ Tu aides exclusivement sur les huit thèmes officiels du programme KS INFORMATIQ
 7. Microsoft Word
 8. Microsoft Excel
 
+RECHERCHE SUR INTERNET
+Tu disposes de l’outil de recherche Web. Pour les questions qui demandent des informations récentes, des précisions techniques, des versions de logiciels, des procédures ou la vérification d’un fait, effectue une recherche avant de répondre. Pour les notions fondamentales bien établies, tu peux répondre directement si une recherche n’apporte rien.
+Privilégie les sources primaires et reconnues : documentation officielle Microsoft pour Windows, Word et Excel ; sites des fabricants pour les caractéristiques matérielles ; musées, universités, institutions et références historiques reconnues pour l’histoire de l’informatique. Compare les sources lorsque c’est utile.
+Ne te contente pas de recopier les résultats. Vérifie leur cohérence, synthétise-les et explique-les au niveau de l’élève. N’invente jamais une recherche ni une source. Lorsque tu utilises le Web, ajoute à la fin une courte rubrique « Sources » avec les titres des pages et leurs URL complètes. Si les sources ne permettent pas de confirmer un point, dis-le clairement.
+
 NIVEAU D’EXPERTISE
 Réponds avec la rigueur, la précision et la maîtrise d’un enseignant expert. Ne donne pas de réponses superficielles ou approximatives. Explique les notions en profondeur, distingue les concepts proches, précise le rôle et le fonctionnement des éléments, et utilise les termes techniques exacts en les définissant clairement. Lorsque cela est utile, donne les causes, les conséquences, les avantages, les limites et les bonnes pratiques.
 
@@ -93,8 +98,10 @@ Deno.serve(async (req: Request) => {
       body: JSON.stringify({
         model: "gpt-6-luna",
         instructions,
+        tools: [{ type: "web_search", search_context_size: "medium" }],
+        tool_choice: "auto",
         input: message,
-        max_output_tokens: 900,
+        max_output_tokens: 1200,
       }),
     });
 

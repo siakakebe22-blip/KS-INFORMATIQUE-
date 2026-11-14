@@ -903,7 +903,9 @@ document.getElementById("ksLogin").addEventListener("submit", async function(e) 
 #mrKebeHead{
   flex:none;background:#3F1D8F;color:#fff;padding:12px 14px;
   display:flex;align-items:center;gap:10px;
+  cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;
 }
+#mrKebeHead:active{cursor:grabbing}
 #mrKebeHead img{width:42px;height:42px;flex:none;border-radius:50%;object-fit:cover;border:2px solid #FFD21F}
 #mrKebeHead strong{display:block;font-size:15px}
 #mrKebeHead small{color:#FFD21F;font-size:11px}
@@ -1014,6 +1016,34 @@ document.getElementById("ksLogin").addEventListener("submit", async function(e) 
     launcher.setAttribute("aria-expanded","false");
     launcher.focus();
   });
+
+  // Déplacement de la fenêtre MR KEBE avec la souris ou le doigt
+  var dragHead=panel.querySelector("#mrKebeHead");
+  var dragState=null;
+  dragHead.addEventListener("pointerdown",function(event){
+    if(!panel.classList.contains("open") || event.target.closest("#mrKebeClose")) return;
+    var rect=panel.getBoundingClientRect();
+    dragState={id:event.pointerId,x:event.clientX,y:event.clientY,left:rect.left,top:rect.top};
+    panel.style.left=rect.left+"px";
+    panel.style.top=rect.top+"px";
+    panel.style.right="auto";
+    panel.style.bottom="auto";
+    panel.style.transform="none";
+    try{dragHead.setPointerCapture(event.pointerId);}catch(e){}
+    event.preventDefault();
+  });
+  dragHead.addEventListener("pointermove",function(event){
+    if(!dragState || dragState.id!==event.pointerId) return;
+    var maxLeft=Math.max(0,window.innerWidth-panel.offsetWidth);
+    var maxTop=Math.max(0,window.innerHeight-panel.offsetHeight);
+    var left=Math.min(maxLeft,Math.max(0,dragState.left+event.clientX-dragState.x));
+    var top=Math.min(maxTop,Math.max(0,dragState.top+event.clientY-dragState.y));
+    panel.style.left=left+"px";
+    panel.style.top=top+"px";
+  });
+  function stopMrKebeDrag(event){if(dragState && (!event || dragState.id===event.pointerId)) dragState=null;}
+  dragHead.addEventListener("pointerup",stopMrKebeDrag);
+  dragHead.addEventListener("pointercancel",stopMrKebeDrag);
 
   form.addEventListener("submit",async function(event){
     event.preventDefault();

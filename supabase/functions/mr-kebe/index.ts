@@ -62,9 +62,11 @@ async function searchFreeSources(question: string): Promise<string> {
   const requests = await Promise.allSettled([
     fetch(`https://fr.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encoded}&format=json&utf8=1&srlimit=4`, {
       headers: { "Accept": "application/json", "User-Agent": "KS-INFORMATIQUE-MR-KEBE/1.0" },
+      signal: AbortSignal.timeout(3500),
     }),
     fetch(`https://learn.microsoft.com/api/search?search=${encoded}&locale=fr-fr&$top=4`, {
       headers: { "Accept": "application/json", "User-Agent": "KS-INFORMATIQUE-MR-KEBE/1.0" },
+      signal: AbortSignal.timeout(3500),
     }),
   ]);
 
@@ -151,24 +153,42 @@ Deno.serve(async (req: Request) => {
       },
     };
 
-    // Gemini peut être temporairement surchargé. Réessayer jusqu'à 3 fois.
-    let response: Response;
-    for (let attempt = 0; attempt < 3; attempt++) {
-      response = await fetch(geminiUrl, {
-        method: "POST",
-        headers: {
-          "x-goog-api-key": apiKey,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(geminiPayload),
-      });
+    // Limiter strictement le temps d'attente pour éviter l'arrêt de la fonction par Supabase.
+    let response: Response | null = null;
+    for (let attempt = 0; attempt < 2; attempt++) {
+      try {
+        response = await fetch(geminiUrl, {
+          method: "POST",
+          headers: {
+            "x-goog-api-key": apiKey,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(geminiPayload),
+          signal: AbortSignal.timeout(25000),
+        });
+      } catch (error) {
+        console.error("Gemini timeout ou erreur réseau:", error);
+        if (attempt === 1) {
+          return new Response(JSON.stringify({
+            error: "Gemini met trop de temps à répondre. Réessaie dans quelques instants.",
+          }), { status: 504, headers: jsonHeaders });
+        }
+      }
 
-      if (response.ok || ![429, 500, 502, 503, 504].includes(response.status) || attempt === 2) {
+      if (response && (response.ok || ![429, 500, 502, 503, 504].includes(response.status))) {
         break;
       }
 
-      console.warn(`Gemini temporairement indisponible (HTTP ${response.status}). Nouvelle tentative ${attempt + 1}/2.`);
-      await new Promise((resolve) => setTimeout(resolve, 900 * (attempt + 1)));
+      if (attempt === 0) {
+        console.warn("Gemini temporairement indisponible. Une seule nouvelle tentative.");
+        await new Promise((resolve) => setTimeout(resolve, 700));
+      }
+    }
+
+    if (!response) {
+      return new Response(JSON.stringify({
+        error: "Le service MR KEBE est temporairement indisponible. Réessaie.",
+      }), { status: 503, headers: jsonHeaders });
     }
 
     const data = await response.json();

@@ -1286,7 +1286,7 @@ function ksAuthError(error){
  if(/already registered|already exists/i.test(raw))return "Cette adresse possède déjà un compte. Connectez-vous ou utilisez « Mot de passe oublié ? ».";
  if(/invalid login credentials/i.test(raw))return "Adresse e-mail ou mot de passe incorrect.";
  if(/email not confirmed/i.test(raw))return "Votre adresse e-mail n'est pas encore confirmée. Demandez un nouvel e-mail.";
- if(/rate limit|too many requests/i.test(raw))return "Trop de tentatives. Patientez quelques minutes puis réessayez.";
+ if(/rate limit|too many requests|over_email_send_rate_limit|email rate limit exceeded/i.test(raw))return "Le service d’envoi d’e-mails a atteint sa limite temporaire. N’insistez pas : attendez le renouvellement du quota. Pour envoyer les confirmations à tous les élèves, l’administrateur KS doit configurer un serveur SMTP personnalisé dans Supabase.";
  if(/network|fetch/i.test(raw))return "Connexion Internet instable. Vérifiez votre réseau puis réessayez.";
  return "Opération impossible : "+raw;
 }

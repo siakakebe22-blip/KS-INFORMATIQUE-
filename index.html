@@ -694,7 +694,7 @@ function results(){var r=res(),h='<h2 style="margin-top:8px">Mes résultats</h2>
   return h+'<h2>Mon bilan</h2><p class="mut">Envoyez ce récapitulatif à votre professeur.</p><textarea id="bt" readonly rows="9" style="width:100%;font:inherit;padding:10px;border:2px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);margin-top:8px">'+x+'</textarea><p style="margin-top:10px"><a class="btn" target="_blank" rel="noopener" href="https://wa.me/224624460422?text='+e+'">WhatsApp</a> <a class="btn alt" href="mailto:siakakebe22@gmail.com?subject='+encodeURIComponent('Bilan KS INFORMATIQUE')+'&body='+e+'">E-mail</a> <button class="btn alt" data-copy="1">Copier</button> <span id="cp2" class="mut"></span></p><p class="mut">Renseignez votre nom dans Mon profil pour qu’il apparaisse dans le bilan.</p><p style="margin-top:14px"><a class="btn" href="#attestations">Mes attestations</a></p>';}
 
 function ksCertDate(){return new Date().toLocaleDateString('fr-FR',{day:'2-digit',month:'long',year:'numeric',timeZone:'Africa/Conakry'});}
-function ksCertSafeName(v){return String(v||'Eleve').normalize('NFD').replace(/[\\u0300-\\u036f]/g,'').replace(/[^a-zA-Z0-9_-]+/g,'_').replace(/^_+|_+$/g,'')||'Eleve';}
+function ksCertSafeName(v){return String(v||'Eleve').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zA-Z0-9_-]+/g,'_').replace(/^_+|_+$/g,'')||'Eleve';}
 function ksCertEscapeXml(v){return String(v==null?'':v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&apos;');}
 function ksCertParagraph(text,size,bold,space,color){
  var r='<w:r><w:rPr>'+(bold?'<w:b/>':'')+'<w:sz w:val="'+(size||24)+'"/><w:color w:val="'+(color||'252044')+'"/><w:rFonts w:ascii="Aptos" w:hAnsi="Aptos"/></w:rPr><w:t xml:space="preserve">'+ksCertEscapeXml(text)+'</w:t></w:r>';
@@ -747,16 +747,16 @@ function ksCertSaveBlob(blob,name){
 }
 function ksCertPdfText(text,y,size,bold,color){
  var safe=String(text).normalize('NFC'),map={'€':128,'Œ':140,'œ':156,'Š':138,'š':154,'Ÿ':159,'Ž':142,'ž':158};
- var bytes=[];for(var i=0;i<safe.length;i++){var ch=safe[i],code=ch.charCodeAt(0);if(map[ch]!=null)code=map[ch];else if(code>255){var n=ch.normalize('NFD').replace(/[\\u0300-\\u036f]/g,'');code=n.charCodeAt(0)||63;}if(code<32||code>255)code=63;bytes.push(code);}
+ var bytes=[];for(var i=0;i<safe.length;i++){var ch=safe[i],code=ch.charCodeAt(0);if(map[ch]!=null)code=map[ch];else if(code>255){var n=ch.normalize('NFD').replace(/[\u0300-\u036f]/g,'');code=n.charCodeAt(0)||63;}if(code<32||code>255)code=63;bytes.push(code);}
  var str=bytes.map(function(b){if(b===40||b===41||b===92)return '\\'+String.fromCharCode(b);if(b<32||b>126)return '\\'+('00'+b.toString(8)).slice(-3);return String.fromCharCode(b);}).join('');
  var x=Math.max(48,421-(safe.length*size*(bold?.28:.25)));
- return 'BT /'+(bold?'F2':'F1')+' '+size+' Tf '+color+' rg 1 0 0 1 '+x.toFixed(1)+' '+y+' Tm ('+str+') Tj ET\\n';
+ return 'BT /'+(bold?'F2':'F1')+' '+size+' Tf '+color+' rg 1 0 0 1 '+x.toFixed(1)+' '+y+' Tm ('+str+') Tj ET\n';
 }
 function ksCertDownloadPdf(student,course,score,date,ref){
- var stream='0.18 0.08 0.42 RG 3 w 30 30 782 535 re S\\n0.82 0.65 0.08 RG 1.2 w 40 40 762 515 re S\\n';
+ var stream='0.18 0.08 0.42 RG 3 w 30 30 782 535 re S\n0.82 0.65 0.08 RG 1.2 w 40 40 762 515 re S\n';
  stream+=ksCertPdfText('COMPLEXE SCOLAIRE KS',520,19,true,'0.18 0.08 0.42');
  stream+=ksCertPdfText('KS INFORMATIQUE',488,15,true,'0.36 0.18 0.72');
- stream+='0.82 0.65 0.08 RG 2 w 170 455 m 672 455 l S\\n';
+ stream+='0.82 0.65 0.08 RG 2 w 170 455 m 672 455 l S\n';
  stream+=ksCertPdfText('ATTESTATION DE REUSSITE',405,27,true,'0.18 0.08 0.42');
  stream+=ksCertPdfText('Le Complexe Scolaire KS atteste que',350,16,false,'0.12 0.10 0.20');
  stream+=ksCertPdfText(student,300,25,true,'0.36 0.18 0.72');
@@ -766,11 +766,11 @@ function ksCertDownloadPdf(student,course,score,date,ref){
  stream+=ksCertPdfText('Critere : chapitres termines et score minimum de 60 %.',145,11,false,'0.20 0.20 0.24');
  stream+=ksCertPdfText('Delivree le '+date,115,12,false,'0.12 0.10 0.20');
  stream+=ksCertPdfText('Reference pedagogique : '+ref,91,9,false,'0.35 0.35 0.35');
- stream+='0.18 0.08 0.42 RG 1 w 520 85 m 730 85 l S\\n';
+ stream+='0.18 0.08 0.42 RG 1 w 520 85 m 730 85 l S\n';
  stream+=ksCertPdfText('Signature et cachet',72,10,true,'0.18 0.08 0.42');
- var objects=['<< /Type /Catalog /Pages 2 0 R >>','<< /Type /Pages /Kids [3 0 R] /Count 1 >>','<< /Type /Page /Parent 2 0 R /MediaBox [0 0 842 595] /Resources << /Font << /F1 4 0 R /F2 5 0 R >> >> /Contents 6 0 R >>','<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>','<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>','<< /Length '+new TextEncoder().encode(stream).length+' >>\\nstream\\n'+stream+'endstream'];
- var pdf='%PDF-1.4\\n%KSINFORMATIQUE\\n',offsets=[0];objects.forEach(function(o,i){offsets.push(new TextEncoder().encode(pdf).length);pdf+=(i+1)+' 0 obj\\n'+o+'\\nendobj\\n';});
- var xref=new TextEncoder().encode(pdf).length;pdf+='xref\\n0 '+(objects.length+1)+'\\n0000000000 65535 f \\n';for(var j=1;j<offsets.length;j++)pdf+=String(offsets[j]).padStart(10,'0')+' 00000 n \\n';pdf+='trailer\\n<< /Size '+(objects.length+1)+' /Root 1 0 R >>\\nstartxref\\n'+xref+'\\n%%EOF';
+ var objects=['<< /Type /Catalog /Pages 2 0 R >>','<< /Type /Pages /Kids [3 0 R] /Count 1 >>','<< /Type /Page /Parent 2 0 R /MediaBox [0 0 842 595] /Resources << /Font << /F1 4 0 R /F2 5 0 R >> >> /Contents 6 0 R >>','<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>','<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>','<< /Length '+new TextEncoder().encode(stream).length+' >>\nstream\n'+stream+'endstream'];
+ var pdf='%PDF-1.4\n%KSINFORMATIQUE\n',offsets=[0];objects.forEach(function(o,i){offsets.push(new TextEncoder().encode(pdf).length);pdf+=(i+1)+' 0 obj\n'+o+'\nendobj\n';});
+ var xref=new TextEncoder().encode(pdf).length;pdf+='xref\n0 '+(objects.length+1)+'\n0000000000 65535 f \n';for(var j=1;j<offsets.length;j++)pdf+=String(offsets[j]).padStart(10,'0')+' 00000 n \n';pdf+='trailer\n<< /Size '+(objects.length+1)+' /Root 1 0 R >>\nstartxref\n'+xref+'\n%%EOF';
  ksCertSaveBlob(new Blob([new TextEncoder().encode(pdf)],{type:'application/pdf'}),'Attestation_KS_'+ksCertSafeName(student)+'_'+ksCertSafeName(course)+'.pdf');
 }
 window.ksDownloadCertificate=function(key,format){
@@ -781,8 +781,10 @@ window.ksDownloadCertificate=function(key,format){
  else if(format==='pdf')ksCertDownloadPdf(student,course,b,date,ref);
  else if(format==='print'){
   var w=window.open('','_blank');if(!w){alert("Autorise les fenêtres d’impression pour ce site, puis réessaie.");return;}
-  w.document.write('<!doctype html><html lang="fr"><meta charset="utf-8"><title>Attestation KS</title><style>body{font-family:Arial,sans-serif;padding:35px;color:#25134e;text-align:center}.cert{border:8px double #5b2db8;padding:55px 25px;min-height:620px;display:flex;flex-direction:column;justify-content:center}h1{font-size:30px}h2{font-size:25px;color:#5b2db8;margin:35px}p{font-size:17px;line-height:1.7}.name{font-size:30px;font-weight:bold;color:#5b2db8}.sign{margin-top:65px}@page{size:A4;margin:15mm}@media print{body{padding:0}}</style><div class="cert"><h1>COMPLEXE SCOLAIRE KS</h1><h2>KS INFORMATIQUE</h2><h1>ATTESTATION DE RÉUSSITE</h1><p>Le Complexe Scolaire KS atteste que</p><p class="name">'+String(student).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];})+'</p><p>a suivi et validé le cours :<br><b>'+String(course).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];})+'</b></p><p>Résultat au quiz : <b>'+b+' %</b></p><p>Délivrée le '+date+'</p><p class="sign">Signature et cachet de l’établissement<br>____________________________</p></div><script>window.onload=function(){window.print()}<\\/script></html>');
+  w.document.write('<!doctype html><html lang="fr"><meta charset="utf-8"><title>Attestation KS</title><style>body{font-family:Arial,sans-serif;padding:35px;color:#25134e;text-align:center}.cert{border:8px double #5b2db8;padding:55px 25px;min-height:620px;display:flex;flex-direction:column;justify-content:center}h1{font-size:30px}h2{font-size:25px;color:#5b2db8;margin:35px}p{font-size:17px;line-height:1.7}.name{font-size:30px;font-weight:bold;color:#5b2db8}.sign{margin-top:65px}@page{size:A4;margin:15mm}@media print{body{padding:0}}</style><div class="cert"><h1>COMPLEXE SCOLAIRE KS</h1><h2>KS INFORMATIQUE</h2><h1>ATTESTATION DE RÉUSSITE</h1><p>Le Complexe Scolaire KS atteste que</p><p class="name">'+String(student).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];})+'</p><p>a suivi et validé le cours :<br><b>'+String(course).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];})+'</b></p><p>Résultat au quiz : <b>'+b+' %</b></p><p>Délivrée le '+date+'</p><p class="sign">Signature et cachet de l’établissement<br>____________________________</p></div></html>');
   w.document.close();
+  w.onload=function(){w.focus();w.print();};
+
  }
 };
 function attest(){var h='<h2 style="margin-top:8px">Mes attestations</h2><p class="mut">Chaque attestation est délivrée automatiquement après validation du cours : tous les chapitres terminés et au moins 60 % au quiz. Tu peux ensuite télécharger le document en PDF ou Word, ou l’imprimer.</p><div style="margin-top:14px">',c=0;

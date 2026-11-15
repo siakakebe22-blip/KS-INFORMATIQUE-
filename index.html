@@ -1463,12 +1463,14 @@ forgot.addEventListener("click",async function(){
   padding:10px 16px 10px 10px;border:0;border-radius:999px;
   background:#3F1D8F;color:#fff;
   box-shadow:0 7px 26px #21104455;
-  font:700 15px system-ui,sans-serif;cursor:pointer;
-  transition:transform .2s ease,box-shadow .2s ease;
+  font:700 15px system-ui,sans-serif;cursor:grab;
+  transition:box-shadow .2s ease;
+  touch-action:none;user-select:none;-webkit-user-select:none;
   -webkit-tap-highlight-color:transparent;
 }
-#mrKebeLauncher:hover{transform:translateY(-2px);box-shadow:0 10px 30px #21104466}
-#mrKebeLauncher:active{transform:scale(.97)}
+#mrKebeLauncher:hover{box-shadow:0 10px 30px #21104466}
+#mrKebeLauncher:active{cursor:grabbing}
+#mrKebeLauncher.mr-kebe-dragging{cursor:grabbing;transition:none;transform:none;box-shadow:0 14px 36px #21104488}
 #mrKebeLauncher img{width:42px;height:42px;flex:none;border-radius:50%;object-fit:cover;border:2px solid #FFD21F}
 
 /* Fenêtre flottante — animation douce sans display:none */
@@ -1598,7 +1600,71 @@ forgot.addEventListener("click",async function(){
   addMessage("Bonjour ! Je suis MR KEBE, ton professeur virtuel. Je peux t’aider sur les huit thèmes du programme KS INFORMATIQUE : histoire, branches, avantages et conséquences, Hardware, Software, Windows, Word et Excel.", "bot");
 
   launcher.setAttribute("aria-expanded","false");
+
+  // Déplacement de l'icône MR KEBE même lorsque la discussion est fermée.
+  var launcherDrag=null;
+  var suppressLauncherClick=false;
+  var launcherPositionKey="ks-mr-kebe-launcher-position";
+  function clampLauncherPosition(left,top){
+    return {
+      left:Math.max(0,Math.min(window.innerWidth-launcher.offsetWidth,left)),
+      top:Math.max(0,Math.min(window.innerHeight-launcher.offsetHeight,top))
+    };
+  }
+  function saveLauncherPosition(){
+    try{
+      localStorage.setItem(launcherPositionKey,JSON.stringify({
+        left:parseFloat(launcher.style.left)||0,
+        top:parseFloat(launcher.style.top)||0
+      }));
+    }catch(err){}
+  }
+  try{
+    var savedLauncherPosition=JSON.parse(localStorage.getItem(launcherPositionKey)||"null");
+    if(savedLauncherPosition && Number.isFinite(savedLauncherPosition.left) && Number.isFinite(savedLauncherPosition.top)){
+      var restoredLauncherPosition=clampLauncherPosition(savedLauncherPosition.left,savedLauncherPosition.top);
+      launcher.style.left=restoredLauncherPosition.left+"px";
+      launcher.style.top=restoredLauncherPosition.top+"px";
+      launcher.style.right="auto";
+      launcher.style.bottom="auto";
+    }
+  }catch(err){}
+  launcher.addEventListener("pointerdown",function(e){
+    if(e.button!==0 || e.target.closest("a")) return;
+    var rect=launcher.getBoundingClientRect();
+    launcherDrag={id:e.pointerId,startX:e.clientX,startY:e.clientY,left:rect.left,top:rect.top,moved:false};
+    launcher.style.left=rect.left+"px";
+    launcher.style.top=rect.top+"px";
+    launcher.style.right="auto";
+    launcher.style.bottom="auto";
+    try{launcher.setPointerCapture(e.pointerId);}catch(err){}
+  });
+  launcher.addEventListener("pointermove",function(e){
+    if(!launcherDrag || launcherDrag.id!==e.pointerId) return;
+    var dx=e.clientX-launcherDrag.startX;
+    var dy=e.clientY-launcherDrag.startY;
+    if(!launcherDrag.moved && Math.hypot(dx,dy)<6) return;
+    launcherDrag.moved=true;
+    launcher.classList.add("mr-kebe-dragging");
+    var pos=clampLauncherPosition(launcherDrag.left+dx,launcherDrag.top+dy);
+    launcher.style.left=pos.left+"px";
+    launcher.style.top=pos.top+"px";
+    e.preventDefault();
+  });
+  function endLauncherDrag(e){
+    if(!launcherDrag || launcherDrag.id!==e.pointerId) return;
+    if(launcherDrag.moved){
+      saveLauncherPosition();
+      suppressLauncherClick=true;
+      setTimeout(function(){suppressLauncherClick=false;},350);
+    }
+    launcher.classList.remove("mr-kebe-dragging");
+    launcherDrag=null;
+  }
+  launcher.addEventListener("pointerup",endLauncherDrag);
+  launcher.addEventListener("pointercancel",endLauncherDrag);
   launcher.addEventListener("click",function(){
+    if(suppressLauncherClick){suppressLauncherClick=false;return;}
     var isOpen=panel.classList.toggle("open");
     launcher.setAttribute("aria-expanded",String(isOpen));
     // Ne pas focaliser automatiquement le champ à l’ouverture : cela déclenche le zoom mobile et le clavier.

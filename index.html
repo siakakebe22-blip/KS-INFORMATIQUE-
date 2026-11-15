@@ -225,6 +225,70 @@ table{max-width:100%;display:block;overflow-x:auto}
 @keyframes ksIntroLoad{from{transform:translateX(-120%)}to{transform:translateX(260%)}}
 @media(prefers-reduced-motion:reduce){#ks-intro *{animation:none!important}#ks-intro{transition:none}}
 </style>
+<style>
+/* KS INFORMATIQUE — modernisation visuelle et confort de lecture */
+:root{--ks-radius:18px;--ks-shadow:0 12px 34px rgba(39,20,89,.09);--ks-shadow-hover:0 18px 42px rgba(39,20,89,.15)}
+html{scroll-behavior:smooth;scroll-padding-top:125px}
+body{background:radial-gradient(ellipse at 12% 0%,rgba(124,92,210,.07),transparent 36%),var(--bg)}
+.top{z-index:1000;box-shadow:0 8px 26px rgba(25,10,65,.14);backdrop-filter:saturate(1.25)}
+.bar{min-height:68px}
+.lg{box-shadow:0 0 0 3px rgba(255,210,31,.22)}
+.bar b{letter-spacing:.025em}
+.bar small{font-size:.76rem;letter-spacing:.015em}
+nav{border-top:1px solid rgba(255,255,255,.12)}
+.nv{gap:4px;padding:5px 12px;scrollbar-width:none}
+.nv::-webkit-scrollbar{display:none}
+.nv a,.nv span{border-radius:10px 10px 4px 4px;transition:background .2s ease,color .2s ease,transform .2s ease}
+.nv a:hover{background:rgba(255,255,255,.15);transform:translateY(-1px)}
+.nv a.on{background:var(--ye);color:#20133d;box-shadow:0 3px 12px rgba(0,0,0,.12)}
+main{width:min(100% - 28px,1180px);margin:24px auto 54px}
+.hero{position:relative;isolation:isolate;overflow:hidden;border:1px solid rgba(255,255,255,.16);border-bottom:5px solid var(--ye);border-radius:24px;padding:clamp(24px,4vw,46px);box-shadow:0 18px 42px rgba(45,19,107,.2)}
+.hero:after{content:"";position:absolute;z-index:-1;width:310px;height:310px;right:-110px;top:-150px;border:1px solid rgba(255,255,255,.16);border-radius:50%;box-shadow:0 0 0 34px rgba(255,255,255,.035),0 0 0 70px rgba(255,255,255,.025)}
+.hero h1{line-height:1.12;letter-spacing:-.035em}
+.hero p{line-height:1.75;color:rgba(255,255,255,.88)}
+.hero-actions{gap:10px}
+.btn{min-height:44px;display:inline-flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 5px 14px rgba(20,8,55,.12);transition:transform .18s ease,box-shadow .18s ease,filter .18s ease}
+.btn:hover{transform:translateY(-2px);box-shadow:0 9px 20px rgba(20,8,55,.17);filter:brightness(1.03)}
+.btn:focus-visible,.nv a:focus-visible,.dom:focus-visible,button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #F6B900;outline-offset:3px}
+.grid{gap:14px}
+.dom{position:relative;min-height:145px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;border-radius:18px;padding:18px 14px;box-shadow:0 5px 16px rgba(39,20,89,.045);transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease}
+.dom:hover{transform:translateY(-4px);border-color:rgba(91,45,184,.4);box-shadow:var(--ks-shadow-hover)}
+.dom svg{width:42px;height:42px;padding:7px;border-radius:13px;background:rgba(91,45,184,.08)}
+.pnl,.panel{border-radius:18px;box-shadow:0 5px 20px rgba(39,20,89,.045);border-color:color-mix(in srgb,var(--line) 78%,transparent)}
+.pnl{margin-bottom:16px}
+.pnl>h3{padding:12px 16px;background:linear-gradient(100deg,var(--pu),var(--pu2));letter-spacing:.01em}
+.pnl>div{padding:16px}
+.panel{padding:18px}
+.prof{border-radius:18px;box-shadow:var(--ks-shadow)}
+table{border-collapse:separate;border-spacing:0}
+th{letter-spacing:.015em}
+img{max-width:100%}
+input,select,textarea{border-radius:11px;max-width:100%}
+#ks-reading-progress{position:fixed;z-index:10002;top:env(safe-area-inset-top,0px);left:0;width:100%;height:3px;background:transparent;pointer-events:none}
+#ks-reading-progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,#FFD21F,#75E3AE);box-shadow:0 0 10px rgba(255,210,31,.5)}
+#ks-skip-link{position:fixed;z-index:10003;left:12px;top:8px;padding:10px 14px;background:#fff;color:#321477;border-radius:10px;font-weight:800;transform:translateY(-150%);transition:transform .2s}
+#ks-skip-link:focus{transform:translateY(0)}
+#ks-back-top{position:fixed;z-index:9997;right:16px;bottom:calc(82px + env(safe-area-inset-bottom));width:44px;height:44px;border:1px solid rgba(255,255,255,.45);border-radius:50%;background:#fff;color:#3F1D8F;box-shadow:0 8px 24px rgba(24,8,65,.2);font-size:21px;font-weight:900;cursor:pointer;opacity:0;visibility:hidden;transform:translateY(8px);transition:all .2s ease}
+#ks-back-top.visible{opacity:1;visibility:visible;transform:translateY(0)}
+#ks-back-top:hover{background:#FFD21F;transform:translateY(-2px)}
+@media(min-width:900px){main{margin-top:30px}.grid{gap:16px}}
+@media(max-width:600px){
+ main{width:calc(100% - 20px);margin:14px auto 38px}
+ .bar{min-height:60px;padding:8px 12px}
+ .lg{width:42px;height:42px}
+ .bar b{font-size:.96rem}
+ .bar small{font-size:.68rem;display:block;line-height:1.35}
+ .nv{padding:4px 8px;gap:3px}
+ .nv a,.nv span{padding:9px 11px;font-size:.82rem}
+ .hero{border-radius:19px;padding:23px 17px}
+ .hero h1{font-size:clamp(1.55rem,7vw,2rem)}
+ .dom{min-height:132px;padding:13px 9px}
+ .dom svg{width:38px;height:38px}
+ .pnl>div{padding:13px}
+ #ks-back-top{right:12px;bottom:calc(78px + env(safe-area-inset-bottom))}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+</style>
 </head>
 <body>
 <div id="ks-intro" role="status" aria-label="Ouverture de KS INFORMATIQUE"><div class="ks-intro-content"><img class="ks-intro-logo" id="ks-intro-logo" alt="Logo du Complexe Scolaire KS"><div class="ks-intro-photo-wrap"><img class="ks-intro-photo" id="ks-intro-photo" alt="Siaka Kebe, professeur d’informatique"></div><div class="ks-intro-title">KS INFORMATIQUE</div><p class="ks-intro-sub">Bienvenue dans votre espace d’apprentissage</p><div class="ks-intro-tag">Avec Siaka Kebe · Complexe Scolaire KS</div><div class="ks-intro-track"></div></div></div>
@@ -1531,5 +1595,38 @@ document.getElementById("ksLogin").addEventListener("submit", async function(e) 
 })();
 </script>
 
+<script>
+/* Petites fonctions d'ergonomie, sans dépendance externe */
+(function(){
+  if(window.__ksModernUXReady)return;window.__ksModernUXReady=true;
+  var progress=document.createElement("div");progress.id="ks-reading-progress";progress.setAttribute("aria-hidden","true");
+  progress.innerHTML="<span></span>";document.body.appendChild(progress);
+  var skip=document.createElement("a");skip.id="ks-skip-link";skip.href="#app";skip.textContent="Aller directement au contenu";
+  document.body.insertBefore(skip,document.body.firstChild);
+  var top=document.createElement("button");top.id="ks-back-top";top.type="button";top.setAttribute("aria-label","Revenir en haut de la page");top.title="Revenir en haut";top.textContent="↑";document.body.appendChild(top);
+  top.addEventListener("click",function(){window.scrollTo({top:0,behavior:window.matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"});});
+  var bar=progress.firstChild,scheduled=false;
+  function update(){
+    var max=document.documentElement.scrollHeight-window.innerHeight;
+    bar.style.width=(max>0?Math.min(100,Math.max(0,window.scrollY/max*100)):0)+"%";
+    top.classList.toggle("visible",window.scrollY>420);
+    scheduled=false;
+  }
+  window.addEventListener("scroll",function(){if(!scheduled){scheduled=true;window.requestAnimationFrame(update);}},{passive:true});
+  window.addEventListener("resize",update,{passive:true});update();
+  var links=Array.prototype.slice.call(document.querySelectorAll("#nv a[href^='#']"));
+  function activate(hash){links.forEach(function(a){var on=a.getAttribute("href")===hash;a.classList.toggle("on",on);if(on)a.setAttribute("aria-current","location");else a.removeAttribute("aria-current");});}
+  links.forEach(function(a){a.addEventListener("click",function(){activate(a.getAttribute("href"));});});
+  if("IntersectionObserver" in window){
+    var sections=links.map(function(a){var id=a.getAttribute("href").slice(1);return document.getElementById(id);}).filter(Boolean);
+    var observer=new IntersectionObserver(function(entries){
+      var visible=entries.filter(function(e){return e.isIntersecting;}).sort(function(a,b){return b.intersectionRatio-a.intersectionRatio;});
+      if(visible[0])activate("#"+visible[0].target.id);
+    },{rootMargin:"-22% 0px -65% 0px",threshold:[0,.15,.35,.6]});
+    sections.forEach(function(section){observer.observe(section);});
+  }
+  if(location.hash)activate(location.hash);
+})();
+</script>
 </body>
 </html>

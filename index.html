@@ -752,172 +752,133 @@ async function ksSyncTP(){
 window.addEventListener('online',ksSyncTP);
 
 
-// Création de l'espace d'inscription et de connexion
+// Espace d'inscription : affiché au premier passage, puis remplacé après inscription/connexion
 const authBox = document.createElement("section");
-
-authBox.style.cssText =
-  "max-width:600px;margin:25px auto;padding:20px;background:white;border:2px solid #7040a0;border-radius:14px;color:#222;font-family:Arial,sans-serif;";
+authBox.id = "ksAuthBox";
+authBox.style.cssText = "max-width:600px;margin:25px auto;padding:20px;background:white;border:2px solid #7040a0;border-radius:14px;color:#222;font-family:Arial,sans-serif;";
 
 authBox.innerHTML = `
   <h2 style="color:#7040a0">Espace KS INFORMATIQUE</h2>
-
-  <h3>Créer un compte élève</h3>
-
-  <form id="ksSignup">
-    <input id="ksName" placeholder="Nom complet" required
-      style="width:100%;padding:12px;margin:6px 0;box-sizing:border-box">
-
-    <input id="ksEmail" type="email" placeholder="Adresse e-mail" required
-      style="width:100%;padding:12px;margin:6px 0;box-sizing:border-box">
-
-    <input id="ksPassword" type="password" minlength="6"
-      placeholder="Mot de passe (6 caractères minimum)" required
-      style="width:100%;padding:12px;margin:6px 0;box-sizing:border-box">
-
-    <button type="submit">Créer mon compte</button>
-  </form>
-
-  <hr>
-
-  <h3>Déjà inscrit ? Se connecter</h3>
-
+  <div id="ksSignupArea">
+    <h3>Créer un compte élève</h3>
+    <form id="ksSignup">
+      <input id="ksName" placeholder="Nom complet" autocomplete="name" required style="width:100%;padding:12px;margin:6px 0;box-sizing:border-box">
+      <input id="ksEmail" type="email" placeholder="Adresse e-mail" autocomplete="email" required style="width:100%;padding:12px;margin:6px 0;box-sizing:border-box">
+      <input id="ksPassword" type="password" minlength="6" placeholder="Mot de passe (6 caractères minimum)" autocomplete="new-password" required style="width:100%;padding:12px;margin:6px 0;box-sizing:border-box">
+      <button type="submit">Créer mon compte</button>
+    </form>
+    <hr>
+  </div>
+  <h3 id="ksLoginTitle">Déjà inscrit ? Se connecter</h3>
   <form id="ksLogin">
-    <input id="ksLoginEmail" type="email" placeholder="Adresse e-mail" required
-      style="width:100%;padding:12px;margin:6px 0;box-sizing:border-box">
-
-    <input id="ksLoginPassword" type="password" placeholder="Mot de passe" required
-      style="width:100%;padding:12px;margin:6px 0;box-sizing:border-box">
-
+    <input id="ksLoginEmail" type="email" placeholder="Adresse e-mail" autocomplete="username" required style="width:100%;padding:12px;margin:6px 0;box-sizing:border-box">
+    <input id="ksLoginPassword" type="password" placeholder="Mot de passe" autocomplete="current-password" required style="width:100%;padding:12px;margin:6px 0;box-sizing:border-box">
     <button type="submit">Se connecter</button>
   </form>
-
   <p id="ksMessage" role="status" aria-live="polite"></p>
 `;
 
 const app = document.getElementById("app");
+if (app) app.parentNode.insertBefore(authBox, app);
 
-if (app) {
-  app.parentNode.insertBefore(authBox, app);
+function ksSafeText(value) {
+  return String(value || "").replace(/[&<>"']/g, function(c) {
+    return ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[c];
+  });
 }
 
-const msg = document.getElementById("ksMessage");
+function ksShowConnected(user, profile) {
+  const name = profile && profile.full_name ? profile.full_name :
+    (user.user_metadata && user.user_metadata.full_name) || user.email || "Élève";
+  const role = profile && profile.role ? profile.role : "élève";
+  ksActivateTPForSession(user.id);
+  authBox.innerHTML = `
+    <h2 style="color:#7040a0">Bienvenue ${ksSafeText(name)} !</h2>
+    <p>Votre espace KS INFORMATIQUE est ouvert.</p>
+    <p>Votre rôle : <strong>${ksSafeText(role)}</strong></p>
+    <p>Votre inscription est reconnue. Le formulaire d'inscription ne s'affichera plus tant que vous restez connecté.</p>
+    <button id="ksLogout" type="button">Déconnexion</button>
+  `;
+  document.getElementById("ksLogout").addEventListener("click", async function() {
+    ksDeactivateTP();
+    const result = await supabaseClient.auth.signOut();
+    if (result.error) {
+      alert("Impossible de fermer la session : " + result.error.message);
+      return;
+    }
+    location.reload();
+  });
+}
 
-// Inscription des élèves
+async function ksLoadProfile(user) {
+  const result = await supabaseClient.from("profiles")
+    .select("full_name, role").eq("id", user.id).maybeSingle();
+  if (!result.error && result.data) {
+    localStorage.setItem("ks-profile-" + user.id, JSON.stringify(result.data));
+    return result.data;
+  }
+  try {
+    const saved = localStorage.getItem("ks-profile-" + user.id);
+    if (saved) return JSON.parse(saved);
+  } catch (e) {}
+  return {
+    full_name: (user.user_metadata && user.user_metadata.full_name) || user.email || "Élève",
+    role: "élève"
+  };
+}
+
+// Inscription : après création, on retire le formulaire d'inscription.
 document.getElementById("ksSignup").addEventListener("submit", async function(e) {
   e.preventDefault();
-
   const fullName = document.getElementById("ksName").value.trim();
   const email = document.getElementById("ksEmail").value.trim();
   const password = document.getElementById("ksPassword").value;
-
+  const msg = document.getElementById("ksMessage");
   msg.textContent = "Création du compte en cours...";
-
   const { data, error } = await supabaseClient.auth.signUp({
     email: email,
     password: password,
-    options: {
-      data: { full_name: fullName }
-    }
+    options: { data: { full_name: fullName } }
   });
-
   if (error) {
     msg.textContent = "Erreur : " + error.message;
     return;
   }
-
-  msg.textContent = data.session
-    ? "Compte créé avec succès !"
-    : "Compte créé. Vérifiez votre boîte e-mail pour confirmer votre adresse.";
+  document.getElementById("ksSignupArea").remove();
+  if (data.session && data.user) {
+    const profile = await ksLoadProfile(data.user);
+    ksShowConnected(data.user, profile);
+    return;
+  }
+  msg.textContent = "Compte créé avec succès. Vérifiez votre boîte e-mail pour confirmer votre adresse. Le formulaire d'inscription a été retiré ; vous pourrez vous connecter après confirmation.";
 });
 
-// 
-
-// Connexion
+// Connexion des élèves déjà inscrits.
 document.getElementById("ksLogin").addEventListener("submit", async function(e) {
   e.preventDefault();
-
   const email = document.getElementById("ksLoginEmail").value.trim();
   const password = document.getElementById("ksLoginPassword").value;
-
+  const msg = document.getElementById("ksMessage");
   msg.textContent = "Connexion en cours...";
-
   const { data, error } = await supabaseClient.auth.signInWithPassword({
     email: email,
     password: password
   });
-
   if (error) {
     msg.textContent = "Erreur : " + error.message;
     return;
   }
-
-  const { data: profile, error: profileError } = await supabaseClient
-    .from("profiles")
-    .select("full_name, role")
-    .eq("id", data.user.id)
-    .single();
-
-  if (profileError) {
-    msg.textContent = "Connexion réussie, mais profil introuvable.";
-    return;
-  }
-
-  localStorage.setItem(
-    "ks-profile-" + data.user.id,
-    JSON.stringify(profile)
-  );
-
-  ksActivateTPForSession(data.user.id);
-
-  authBox.innerHTML = `
-    <h2 style="color:#7040a0">
-      Bienvenue ${profile.full_name.replace(/[&<>"']/g, "")} !
-    </h2>
-    <p>Votre espace KS INFORMATIQUE est ouvert.</p>
-    <p>Votre rôle : <strong>${profile.role}</strong></p>
-    <button id="ksLogout" type="button">Déconnexion</button>
-  `;
-
-  document.getElementById("ksLogout").addEventListener("click", async function() {
-    ksDeactivateTP();
-    await supabaseClient.auth.signOut();
-    location.reload();
-  });
+  const profile = await ksLoadProfile(data.user);
+  ksShowConnected(data.user, profile);
 });
 
- // Restauration automatique de la session KS
-(async function(){
+// Restaurer la session automatiquement : les élèves déjà connectés ne revoient pas le formulaire.
+(async function() {
   try {
     const { data, error } = await supabaseClient.auth.getSession();
-
-    if (error || !data.session) return;
-
-    ksActivateTPForSession(data.session.user.id);
-
-    const saved = localStorage.getItem(
-      "ks-profile-" + data.session.user.id
-    );
-
-    if (!saved) return;
-
-    const profile = JSON.parse(saved);
-
-    authBox.innerHTML = `
-      <h2 style="color:#7040a0">
-        Bienvenue ${profile.full_name.replace(/[&<>"']/g, "")} !
-      </h2>
-      <p>Votre espace KS INFORMATIQUE est ouvert.</p>
-      <p>Votre rôle : <strong>${profile.role}</strong></p>
-      <p>Compte déjà enregistré sur cet appareil.</p>
-      <button id="ksLogout" type="button">Déconnexion</button>
-    `;
-
-    document.getElementById("ksLogout").addEventListener("click", async function(){
-      ksDeactivateTP();
-    await supabaseClient.auth.signOut();
-      location.reload();
-    });
-
+    if (error || !data.session || !data.session.user) return;
+    const profile = await ksLoadProfile(data.session.user);
+    ksShowConnected(data.session.user, profile);
   } catch (error) {
     console.log("Session KS :", error);
   }

@@ -1,5 +1,5 @@
 
-const CACHE_NAME = 'ks-informatique-v8';
+const CACHE_NAME = 'ks-informatique-v9';
 
 const APP_ROOT = self.registration.scope;
 const HOME_URL = APP_ROOT;

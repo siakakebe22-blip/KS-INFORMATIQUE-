@@ -945,34 +945,105 @@ document.getElementById("ksLogin").addEventListener("submit", async function(e) 
 
 <script>
 (function(){
-  if (!('serviceWorker' in navigator)) return;
-  window.addEventListener('load', function(){
-    navigator.serviceWorker.register('./sw.js', {scope:'./'})
-      .then(function(){ console.log('KS INFORMATIQUE : application prête hors connexion.'); })
-      .catch(function(error){ console.log('Installation hors connexion :', error); });
-  });
   var deferredPrompt = null;
-  var bar = document.querySelector('.bar');
-  var installButton = document.createElement('button');
-  installButton.id = 'ksInstallApp';
-  installButton.type = 'button';
-  installButton.textContent = 'Installer';
-  installButton.style.cssText = 'display:none;margin-left:auto;flex:none;border:0;border-radius:9px;padding:9px 12px;background:#FFD21F;color:#1B1433;font-weight:800;cursor:pointer';
-  if (bar) bar.appendChild(installButton);
-  window.addEventListener('beforeinstallprompt', function(event){
+  var isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent) ||
+    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  var isStandalone = window.matchMedia('(display-mode: standalone)').matches ||
+    window.navigator.standalone === true;
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function(){
+      navigator.serviceWorker.register('./sw.js', {scope:'./'})
+        .then(function(){ console.log('KS INFORMATIQUE : application prête hors connexion.'); })
+        .catch(function(error){ console.log('Installation hors connexion :', error); });
+    });
+  }
+  if (isStandalone) return;
+
+  var style = document.createElement('style');
+  style.textContent = `
+    #ksInstallOverlay{position:fixed;inset:0;z-index:10050;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(15,8,35,.72);backdrop-filter:blur(7px)}
+    #ksInstallCard{width:min(440px,100%);padding:25px 22px 20px;border-radius:24px;background:var(--card,#fff);color:var(--ink,#1B1433);box-shadow:0 24px 80px rgba(0,0,0,.3);text-align:center;animation:ksInstallPop .35s ease-out}
+    #ksInstallCard .ks-install-icon{width:76px;height:76px;object-fit:contain;border-radius:19px;margin:0 auto 13px;box-shadow:0 8px 24px rgba(63,29,143,.18)}
+    #ksInstallCard h2{font-size:1.35rem;margin:0 0 9px;color:var(--ink,#1B1433)}
+    #ksInstallCard p{font-size:.96rem;line-height:1.55;color:var(--mut,#5E5780);margin:0 0 16px}
+    #ksInstallCard .ks-install-primary{width:100%;border:0;border-radius:13px;padding:13px 16px;background:#3F1D8F;color:#fff;font-weight:800;font-size:1rem;cursor:pointer}
+    #ksInstallCard .ks-install-later{margin-top:10px;border:0;background:transparent;color:var(--mut,#5E5780);font-weight:700;padding:10px 16px;cursor:pointer}
+    #ksInstallHelp{display:none;margin-top:13px;padding:12px;border-radius:12px;background:rgba(91,45,184,.09);font-size:.9rem;line-height:1.55;text-align:left}
+    @keyframes ksInstallPop{from{opacity:0;transform:translateY(18px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+    @media(prefers-reduced-motion:reduce){#ksInstallCard{animation:none}}
+  `;
+  document.head.appendChild(style);
+
+  var overlay = document.createElement('div');
+  overlay.id = 'ksInstallOverlay';
+  overlay.setAttribute('role','dialog');
+  overlay.setAttribute('aria-modal','true');
+  overlay.setAttribute('aria-labelledby','ksInstallTitle');
+  overlay.innerHTML = `
+    <div id="ksInstallCard">
+      <img class="ks-install-icon" src="./ks-icon.svg" alt="Logo KS">
+      <h2 id="ksInstallTitle">Installe KS INFORMATIQUE</h2>
+      <p>Retrouve tes cours, exercices et ressources plus facilement. Ajoute KS INFORMATIQUE à l’écran d’accueil de ton téléphone.</p>
+      <button type="button" class="ks-install-primary" id="ksInstallAction">Installer l’application</button>
+      <div id="ksInstallHelp"></div>
+      <button type="button" class="ks-install-later" id="ksInstallLater">Peut-être plus tard</button>
+    </div>`;
+  document.body.appendChild(overlay);
+
+  var action = overlay.querySelector('#ksInstallAction');
+  var help = overlay.querySelector('#ksInstallHelp');
+  var later = overlay.querySelector('#ksInstallLater');
+
+  function showInstall(){
+    if (isStandalone || sessionStorage.getItem('ks-install-dismissed') === '1') return;
+    overlay.style.display = 'flex';
+  }
+  function closeInstall(){
+    overlay.style.display = 'none';
+    sessionStorage.setItem('ks-install-dismissed','1');
+  }
+  later.addEventListener('click',closeInstall);
+  overlay.addEventListener('click',function(e){if(e.target===overlay) closeInstall();});
+
+  action.addEventListener('click',async function(){
+    if(deferredPrompt){
+      deferredPrompt.prompt();
+      try{
+        var choice=await deferredPrompt.userChoice;
+        if(choice && choice.outcome==='accepted') closeInstall();
+      }catch(error){console.log('Installation KS :',error);}
+      deferredPrompt=null;
+      return;
+    }
+    help.style.display='block';
+    if(isIOS){
+      help.innerHTML='<strong>Sur iPhone ou iPad :</strong><br>1. Ouvre ce site dans Safari.<br>2. Appuie sur le bouton <strong>Partager</strong> (carré avec une flèche).<br>3. Choisis <strong>Sur l’écran d’accueil</strong>, puis appuie sur <strong>Ajouter</strong>.';
+      action.textContent='J’ai compris';
+      action.onclick=closeInstall;
+    }else{
+      help.innerHTML='<strong>Pour installer :</strong><br>Ouvre le menu de ton navigateur (⋮), puis choisis <strong>Installer l’application</strong> ou <strong>Ajouter à l’écran d’accueil</strong>.';
+      action.textContent='J’ai compris';
+      action.onclick=closeInstall;
+    }
+  });
+
+  window.addEventListener('beforeinstallprompt',function(event){
     event.preventDefault();
-    deferredPrompt = event;
-    installButton.style.display = 'block';
+    deferredPrompt=event;
+    action.textContent='Installer l’application';
+    help.style.display='none';
+    setTimeout(showInstall,900);
   });
-  installButton.addEventListener('click', async function(){
-    if (!deferredPrompt) return;
-    deferredPrompt.prompt();
-    await deferredPrompt.userChoice;
-    deferredPrompt = null;
-    installButton.style.display = 'none';
+  window.addEventListener('appinstalled',function(){
+    overlay.style.display='none';
+    sessionStorage.setItem('ks-install-dismissed','1');
   });
-  window.addEventListener('appinstalled', function(){
-    installButton.style.display = 'none';
+
+  window.addEventListener('load',function(){
+    setTimeout(function(){
+      if(isIOS) showInstall();
+      else if(!deferredPrompt) showInstall();
+    },2600);
   });
 })();
 </script>

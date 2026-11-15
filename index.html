@@ -297,6 +297,10 @@ input,select,textarea{border-radius:11px;max-width:100%}
 @media(max-width:600px){.ks-cert-actions{display:grid;grid-template-columns:1fr}.ks-cert-actions .btn{width:100%}}
 @media print{.ks-cert-actions{display:none!important}}
 </style>
+
+<style id="ks-certificate-premium">
+.cert{position:relative;overflow:hidden;border:1px solid #d6a928!important;border-radius:20px!important;padding:24px!important;background:linear-gradient(145deg,#fff 0%,#f8f6ff 70%,#fff9e8 100%)!important;box-shadow:0 14px 35px rgba(35,16,80,.12)!important}.cert:before{content:"KS";position:absolute;right:15px;top:12px;width:48px;height:48px;display:grid;place-items:center;border:2px solid #d6a928;border-radius:14px;color:#3f1d8f;font-weight:900;font-size:17px;opacity:.9}.cert h3{color:#3f1d8f!important;font-size:1.25rem!important;letter-spacing:.02em;padding-right:58px}.cert h3:before{content:"✦ ";color:#c59b28}.cert p b{color:#5b2db8}.ks-cert-actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:18px}.ks-cert-actions .btn{border-radius:11px!important;font-weight:800;box-shadow:0 5px 14px rgba(63,29,143,.12)}.ks-cert-actions .btn:first-child{background:#3f1d8f!important;color:#fff!important}.ks-cert-actions .btn.alt{background:#fff!important;color:#3f1d8f!important;border:1px solid #d6a928!important}@media(max-width:560px){.cert{padding:18px!important}.ks-cert-actions{display:grid;grid-template-columns:1fr}.ks-cert-actions .btn{width:100%;text-align:center}}
+</style>
 </head>
 <body>
 <div id="ks-intro" role="status" aria-label="Ouverture de KS INFORMATIQUE"><div class="ks-intro-content"><img class="ks-intro-logo" id="ks-intro-logo" alt="Logo du Complexe Scolaire KS"><div class="ks-intro-photo-wrap"><img class="ks-intro-photo" id="ks-intro-photo" alt="Siaka Kebe, professeur d’informatique"></div><div class="ks-intro-title">KS INFORMATIQUE</div><p class="ks-intro-sub">Bienvenue dans votre espace d’apprentissage</p><div class="ks-intro-tag">Avec Siaka Kebe · Complexe Scolaire KS</div><div class="ks-intro-track"></div></div></div>
@@ -722,20 +726,24 @@ function ksCertZip(files){
 function ksCertDownloadWord(student,course,score,date,ref){
  var doc='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'+
  '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>'+
- ksCertParagraph('COMPLEXE SCOLAIRE KS',28,true,180,'3F1D8F')+
- ksCertParagraph('KS INFORMATIQUE',24,true,80,'5B2DB8')+
- ksCertParagraph('ATTESTATION DE RÉUSSITE',36,true,620,'3F1D8F')+
- ksCertParagraph('Le Complexe Scolaire KS atteste que',22,false,380)+
- ksCertParagraph(student,34,true,260,'5B2DB8')+
- ksCertParagraph('a suivi et validé le cours suivant :',22,false,220)+
- ksCertParagraph(course,28,true,180,'3F1D8F')+
- ksCertParagraph('Résultat obtenu au quiz : '+score+' %',24,true,240,'1E8E3E')+
- ksCertParagraph('Critère de validation : chapitres terminés et score minimum de 60 %.',18,false,160)+
- ksCertParagraph('Délivrée le '+date,20,false,420)+
- ksCertParagraph('Référence pédagogique : '+ref,16,false,140,'666666')+
- ksCertParagraph('Signature et cachet de l’établissement',18,true,700,'3F1D8F')+
- '<w:p><w:pPr><w:jc w:val="center"/></w:pPr><w:r><w:t>________________________________________</w:t></w:r></w:p>'+
- '<w:sectPr><w:pgSz w:w="11906" w:h="16838"/><w:pgMar w:top="1000" w:right="1000" w:bottom="1000" w:left="1000"/></w:sectPr>'+
+ '<w:p><w:pPr><w:jc w:val="center"/><w:spacing w:after="80"/><w:pBdr><w:bottom w:val="single" w:sz="28" w:space="8" w:color="D6A928"/></w:pBdr></w:pPr><w:r><w:rPr><w:b/><w:color w:val="3F1D8F"/><w:sz w:val="40"/></w:rPr><w:t>KS</w:t></w:r></w:p>'+
+ ksCertParagraph('COMPLEXE SCOLAIRE KS',25,true,70,'3F1D8F')+
+ ksCertParagraph('KS INFORMATIQUE  •  APPRENDRE, COMPRENDRE, RÉUSSIR',15,true,80,'5B2DB8')+
+ ksCertParagraph('✦  CERTIFICAT OFFICIEL DE PARCOURS PÉDAGOGIQUE  ✦',16,true,500,'B58A16')+
+ ksCertParagraph('ATTESTATION DE RÉUSSITE',34,true,180,'3F1D8F')+
+ ksCertParagraph('Le Complexe Scolaire KS certifie que',20,false,300,'394158')+
+ ksCertParagraph(student,34,true,180,'5B2DB8')+
+ ksCertParagraph('a suivi et validé avec succès le cours',19,false,120,'394158')+
+ ksCertParagraph(course,29,true,180,'3F1D8F')+
+ ksCertParagraph('✓  RÉSULTAT AU QUIZ : '+score+' %',23,true,200,'16804A')+
+ ksCertParagraph('Les chapitres du cours ont été terminés et le seuil de réussite atteint.',15,false,100,'596174')+
+ ksCertParagraph('Délivrée le : '+date,17,true,300,'3F1D8F')+
+ ksCertParagraph('Référence : '+ref,13,false,80,'737B8C')+
+ ksCertParagraph('MR KEBE  •  ASSISTANT VIRTUEL KS',15,true,300,'5B2DB8')+
+ ksCertParagraph('Aide pédagogique et accompagnement des apprenants',12,false,60,'737B8C')+
+ ksCertParagraph('Signature de la direction                         Cachet de l’établissement',14,true,620,'3F1D8F')+
+ ksCertParagraph('____________________________           ____________________________',14,false,100,'737B8C')+
+ '<w:sectPr><w:pgSz w:w="16838" w:h="11906" w:orient="landscape"/><w:pgMar w:top="650" w:right="900" w:bottom="650" w:left="900"/><w:pgBorders><w:top w:val="double" w:sz="18" w:space="18" w:color="3F1D8F"/><w:left w:val="double" w:sz="18" w:space="18" w:color="D6A928"/><w:bottom w:val="double" w:sz="18" w:space="18" w:color="3F1D8F"/><w:right w:val="double" w:sz="18" w:space="18" w:color="D6A928"/></w:pgBorders></w:sectPr>'+
  '</w:body></w:document>';
  var types='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/></Types>';
  var rels='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>';
@@ -753,21 +761,32 @@ function ksCertPdfText(text,y,size,bold,color){
  return 'BT /'+(bold?'F2':'F1')+' '+size+' Tf '+color+' rg 1 0 0 1 '+x.toFixed(1)+' '+y+' Tm ('+str+') Tj ET\n';
 }
 function ksCertDownloadPdf(student,course,score,date,ref){
- var stream='0.18 0.08 0.42 RG 3 w 30 30 782 535 re S\n0.82 0.65 0.08 RG 1.2 w 40 40 762 515 re S\n';
- stream+=ksCertPdfText('COMPLEXE SCOLAIRE KS',520,19,true,'0.18 0.08 0.42');
- stream+=ksCertPdfText('KS INFORMATIQUE',488,15,true,'0.36 0.18 0.72');
- stream+='0.82 0.65 0.08 RG 2 w 170 455 m 672 455 l S\n';
- stream+=ksCertPdfText('ATTESTATION DE REUSSITE',405,27,true,'0.18 0.08 0.42');
- stream+=ksCertPdfText('Le Complexe Scolaire KS atteste que',350,16,false,'0.12 0.10 0.20');
- stream+=ksCertPdfText(student,300,25,true,'0.36 0.18 0.72');
- stream+=ksCertPdfText('a suivi et valide le cours suivant :',260,16,false,'0.12 0.10 0.20');
- stream+=ksCertPdfText(course,220,21,true,'0.18 0.08 0.42');
- stream+=ksCertPdfText('Resultat obtenu au quiz : '+score+' %',178,16,true,'0.10 0.48 0.24');
- stream+=ksCertPdfText('Critere : chapitres termines et score minimum de 60 %.',145,11,false,'0.20 0.20 0.24');
- stream+=ksCertPdfText('Delivree le '+date,115,12,false,'0.12 0.10 0.20');
- stream+=ksCertPdfText('Reference pedagogique : '+ref,91,9,false,'0.35 0.35 0.35');
- stream+='0.18 0.08 0.42 RG 1 w 520 85 m 730 85 l S\n';
- stream+=ksCertPdfText('Signature et cachet',72,10,true,'0.18 0.08 0.42');
+ var stream='';
+ stream+='0.12 0.06 0.30 RG 5 w 22 22 798 551 re S\n';
+ stream+='0.82 0.65 0.16 RG 1.8 w 34 34 774 527 re S\n';
+ stream+='0.12 0.06 0.30 rg 0 548 842 47 re f\n';
+ stream+='0.82 0.65 0.16 rg 0 541 842 7 re f\n';
+ stream+='0.82 0.65 0.16 RG 2 w 397 496 48 48 re S\n';
+ stream+=ksCertPdfText('KS',505,24,true,'1 1 1');
+ stream+=ksCertPdfText('COMPLEXE SCOLAIRE KS',458,18,true,'0.12 0.06 0.30');
+ stream+=ksCertPdfText('KS INFORMATIQUE  |  APPRENDRE, COMPRENDRE, REUSSIR',432,10,true,'0.36 0.18 0.72');
+ stream+=ksCertPdfText('CERTIFICAT DE PARCOURS PEDAGOGIQUE',393,11,true,'0.68 0.49 0.08');
+ stream+=ksCertPdfText('ATTESTATION DE REUSSITE',350,27,true,'0.12 0.06 0.30');
+ stream+=ksCertPdfText('Le Complexe Scolaire KS certifie que',305,15,false,'0.20 0.20 0.27');
+ stream+=ksCertPdfText(student,263,25,true,'0.36 0.18 0.72');
+ stream+=ksCertPdfText('a suivi et valide avec succes le cours',225,14,false,'0.20 0.20 0.27');
+ stream+=ksCertPdfText(course,188,21,true,'0.12 0.06 0.30');
+ stream+='0.90 0.96 0.92 rg 235 143 372 28 re f\n';
+ stream+=ksCertPdfText('RESULTAT AU QUIZ : '+score+' %',153,15,true,'0.08 0.42 0.24');
+ stream+=ksCertPdfText('Chapitres termines et seuil de reussite atteint',121,10,false,'0.30 0.32 0.38');
+ stream+=ksCertPdfText('Delivree le : '+date,94,11,true,'0.12 0.06 0.30');
+ stream+=ksCertPdfText('Reference : '+ref,74,9,false,'0.35 0.35 0.40');
+ stream+='0.82 0.65 0.16 RG 1.5 w 75 61 m 767 61 l S\n';
+ stream+=ksCertPdfText('MR KEBE  |  ASSISTANT VIRTUEL KS',47,10,true,'0.36 0.18 0.72');
+ stream+=ksCertPdfText('Signature de la direction',92,9,true,'0.12 0.06 0.30');
+ stream+='0.12 0.06 0.30 RG 1 w 80 80 m 270 80 l S\n';
+ stream+=ksCertPdfText('Cachet de l etablissement',92,9,true,'0.12 0.06 0.30');
+ stream+='0.12 0.06 0.30 RG 1 w 570 80 m 760 80 l S\n';
  var objects=['<< /Type /Catalog /Pages 2 0 R >>','<< /Type /Pages /Kids [3 0 R] /Count 1 >>','<< /Type /Page /Parent 2 0 R /MediaBox [0 0 842 595] /Resources << /Font << /F1 4 0 R /F2 5 0 R >> >> /Contents 6 0 R >>','<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>','<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>','<< /Length '+new TextEncoder().encode(stream).length+' >>\nstream\n'+stream+'endstream'];
  var pdf='%PDF-1.4\n%KSINFORMATIQUE\n',offsets=[0];objects.forEach(function(o,i){offsets.push(new TextEncoder().encode(pdf).length);pdf+=(i+1)+' 0 obj\n'+o+'\nendobj\n';});
  var xref=new TextEncoder().encode(pdf).length;pdf+='xref\n0 '+(objects.length+1)+'\n0000000000 65535 f \n';for(var j=1;j<offsets.length;j++)pdf+=String(offsets[j]).padStart(10,'0')+' 00000 n \n';pdf+='trailer\n<< /Size '+(objects.length+1)+' /Root 1 0 R >>\nstartxref\n'+xref+'\n%%EOF';
@@ -781,10 +800,9 @@ window.ksDownloadCertificate=function(key,format){
  else if(format==='pdf')ksCertDownloadPdf(student,course,b,date,ref);
  else if(format==='print'){
   var w=window.open('','_blank');if(!w){alert("Autorise les fenêtres d’impression pour ce site, puis réessaie.");return;}
-  w.document.write('<!doctype html><html lang="fr"><meta charset="utf-8"><title>Attestation KS</title><style>body{font-family:Arial,sans-serif;padding:35px;color:#25134e;text-align:center}.cert{border:8px double #5b2db8;padding:55px 25px;min-height:620px;display:flex;flex-direction:column;justify-content:center}h1{font-size:30px}h2{font-size:25px;color:#5b2db8;margin:35px}p{font-size:17px;line-height:1.7}.name{font-size:30px;font-weight:bold;color:#5b2db8}.sign{margin-top:65px}@page{size:A4;margin:15mm}@media print{body{padding:0}}</style><div class="cert"><h1>COMPLEXE SCOLAIRE KS</h1><h2>KS INFORMATIQUE</h2><h1>ATTESTATION DE RÉUSSITE</h1><p>Le Complexe Scolaire KS atteste que</p><p class="name">'+String(student).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];})+'</p><p>a suivi et validé le cours :<br><b>'+String(course).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];})+'</b></p><p>Résultat au quiz : <b>'+b+' %</b></p><p>Délivrée le '+date+'</p><p class="sign">Signature et cachet de l’établissement<br>____________________________</p></div></html>');
-  w.document.close();
-  w.onload=function(){w.focus();w.print();};
-
+  var esc=function(v){return String(v).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});};
+  w.document.write('<!doctype html><html lang="fr"><meta charset="utf-8"><title>Attestation KS</title><style>*{box-sizing:border-box}body{margin:0;background:#eef0f6;font-family:Arial,sans-serif;color:#21143e}.sheet{width:297mm;height:210mm;margin:12mm auto;padding:12mm;background:#fff;border:5px double #3F1D8F;outline:2px solid #D6A928;outline-offset:-11px;text-align:center;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center}.top{position:absolute;left:0;right:0;top:0;height:15mm;background:#3F1D8F;border-bottom:4px solid #D6A928}.brand{display:flex;align-items:center;gap:14px;margin-top:10mm}.brand img{width:54px;height:54px;object-fit:contain;background:#fff;border-radius:12px;padding:4px}.portrait{width:58px;height:58px;object-fit:cover;border-radius:50%;border:3px solid #D6A928}.ksmark{font-size:18px;font-weight:900;color:#3F1D8F;border:2px solid #D6A928;border-radius:14px;padding:10px 14px}.school{font-size:15px;letter-spacing:2px;color:#3F1D8F;font-weight:800;margin-top:6px}.sub{font-size:10px;letter-spacing:2px;color:#6b55a4;margin:4px 0 16px}.eyebrow{color:#ae8419;font-size:11px;font-weight:bold;letter-spacing:2px;margin:6px}.title{font-size:30px;color:#3F1D8F;letter-spacing:2px;margin:10px 0 16px}.intro{font-size:15px;margin:4px}.name{font-size:29px;font-weight:800;color:#5B2DB8;border-bottom:2px solid #D6A928;padding:5px 30px;margin:8px}.course{font-size:22px;font-weight:800;color:#3F1D8F;margin:8px}.score{background:#e8f5ec;color:#167443;border-radius:20px;padding:8px 22px;font-weight:bold;margin:8px}.date{font-size:13px;color:#4b5263;margin:6px}.ref{font-size:10px;color:#7b8190}.assistant{font-size:12px;color:#5B2DB8;font-weight:bold;margin:8px}.signs{display:flex;justify-content:space-between;width:82%;margin-top:20px;font-size:11px;color:#3F1D8F}.signs span{border-top:1px solid #3F1D8F;padding-top:7px;width:38%}@page{size:A4 landscape;margin:0}@media print{body{background:#fff}.sheet{margin:0;width:297mm;height:210mm;break-after:avoid}}</style><div class="sheet"><div class="top"></div><div class="brand"><img src="'+(PIC.logo||'')+'" alt="Logo KS"><div class="ksmark">KS</div><img class="portrait" src="'+(PIC.prof||'')+'" alt="MR KEBE"></div><div class="school">COMPLEXE SCOLAIRE KS</div><div class="sub">KS INFORMATIQUE · APPRENDRE, COMPRENDRE, RÉUSSIR</div><div class="eyebrow">✦ CERTIFICAT DE PARCOURS PÉDAGOGIQUE ✦</div><h1 class="title">ATTESTATION DE RÉUSSITE</h1><p class="intro">Le Complexe Scolaire KS certifie que</p><div class="name">'+esc(student)+'</div><p class="intro">a suivi et validé avec succès le cours</p><div class="course">'+esc(course)+'</div><div class="score">✓ RÉSULTAT AU QUIZ : '+b+' %</div><div class="date">Délivrée le : '+esc(date)+'</div><div class="ref">Référence : '+esc(ref)+'</div><div class="assistant">MR KEBE · ASSISTANT VIRTUEL KS</div><div class="signs"><span>Signature de la direction</span><span>Cachet de l’établissement</span></div></div></html>');
+  w.document.close();w.onload=function(){w.focus();w.print();};
  }
 };
 function attest(){var h='<h2 style="margin-top:8px">Mes attestations</h2><p class="mut">Chaque attestation est délivrée automatiquement après validation du cours : tous les chapitres terminés et au moins 60 % au quiz. Tu peux ensuite télécharger le document en PDF ou Word, ou l’imprimer.</p><div style="margin-top:14px">',c=0;

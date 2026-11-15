@@ -1276,65 +1276,66 @@ async function ksLoadProfile(user) {
   };
 }
 
-// Inscription : après création, on retire le formulaire d'inscription.
-document.getElementById("ksSignup").addEventListener("submit", async function(e) {
-  e.preventDefault();
-  const fullName = document.getElementById("ksName").value.trim();
-  const email = document.getElementById("ksEmail").value.trim();
-  const password = document.getElementById("ksPassword").value;
-  const msg = document.getElementById("ksMessage");
-  msg.textContent = "Création du compte en cours...";
-  const { data, error } = await supabaseClient.auth.signUp({
-    email: email,
-    password: password,
-    options: { data: { full_name: fullName } }
-  });
-  if (error) {
-    msg.textContent = "Erreur : " + error.message;
-    return;
-  }
-  document.getElementById("ksSignupArea").remove();
-  if (data.session && data.user) {
-    const profile = await ksLoadProfile(data.user);
-    ksShowConnected(data.user, profile);
-    return;
-  }
-  msg.textContent = "Compte créé avec succès. Vérifiez votre boîte e-mail pour confirmer votre adresse. Le formulaire d'inscription a été retiré ; vous pourrez vous connecter après confirmation.";
+// Inscription et connexion : confirmation, renvoi du courriel et récupération du mot de passe.
+function ksAuthMessage(text,kind){
+ const el=document.getElementById("ksMessage");if(!el)return;
+ el.textContent=text;el.style.cssText="padding:10px;border-radius:9px;margin-top:12px;background:"+(kind==="error"?"#fff0f0":kind==="success"?"#edf9f0":"#f2effa")+";color:"+(kind==="error"?"#a32121":kind==="success"?"#176b35":"#49336b")+";";
+}
+function ksAuthError(error){
+ const raw=String(error&&error.message||"");
+ if(/already registered|already exists/i.test(raw))return "Cette adresse possède déjà un compte. Connectez-vous ou utilisez « Mot de passe oublié ? ».";
+ if(/invalid login credentials/i.test(raw))return "Adresse e-mail ou mot de passe incorrect.";
+ if(/email not confirmed/i.test(raw))return "Votre adresse e-mail n'est pas encore confirmée. Demandez un nouvel e-mail.";
+ if(/rate limit|too many requests/i.test(raw))return "Trop de tentatives. Patientez quelques minutes puis réessayez.";
+ if(/network|fetch/i.test(raw))return "Connexion Internet instable. Vérifiez votre réseau puis réessayez.";
+ return "Opération impossible : "+raw;
+}
+function ksBusy(form,busy,label){
+ const b=form.querySelector('button[type="submit"]');if(!b)return;
+ if(busy){b.dataset.original=b.textContent;b.disabled=true;b.textContent=label;}
+ else{b.disabled=false;b.textContent=b.dataset.original||"Valider";}
+}
+function ksRedirect(){return location.origin+location.pathname;}
+function ksAddResend(email){
+ let b=document.getElementById("ksResendConfirmation");
+ if(!b){b=document.createElement("button");b.id="ksResendConfirmation";b.type="button";b.style.cssText="margin-top:8px;padding:11px 14px;border:0;border-radius:8px;background:#7040a0;color:white;cursor:pointer;";document.getElementById("ksMessage").insertAdjacentElement("afterend",b);}
+ b.textContent="Renvoyer le courriel de confirmation";
+ b.onclick=async function(){b.disabled=true;b.textContent="Envoi en cours...";try{const {error}=await supabaseClient.auth.resend({type:"signup",email,options:{emailRedirectTo:ksRedirect()}});if(error)throw error;ksAuthMessage("Demande renvoyée. Vérifiez la boîte de réception et les courriers indésirables.","success");}catch(err){ksAuthMessage(ksAuthError(err),"error");}finally{b.disabled=false;b.textContent="Renvoyer le courriel de confirmation";}};
+}
+document.getElementById("ksSignup").addEventListener("submit",async function(e){
+ e.preventDefault();const form=this,fullName=document.getElementById("ksName").value.trim(),email=document.getElementById("ksEmail").value.trim().toLowerCase(),password=document.getElementById("ksPassword").value;
+ if(!fullName){ksAuthMessage("Veuillez saisir le nom complet de l'élève.","error");return;}
+ ksBusy(form,true,"Création du compte...");ksAuthMessage("Création du compte en cours...");
+ try{
+  const {data,error}=await supabaseClient.auth.signUp({email,password,options:{data:{full_name:fullName},emailRedirectTo:ksRedirect()}});
+  if(error)throw error;
+  if(data.session&&data.user){const profile=await ksLoadProfile(data.user);ksShowConnected(data.user,profile);return;}
+  ksAuthMessage("Compte créé. Pour l'activer, ouvrez le courriel envoyé à "+email+". Vérifiez aussi les courriers indésirables. Si vous ne le recevez pas, demandez un nouvel envoi ci-dessous.","success");ksAddResend(email);
+ }catch(err){ksAuthMessage(ksAuthError(err),"error");}
+ finally{ksBusy(form,false);}
 });
-
-// Connexion des élèves déjà inscrits.
-document.getElementById("ksLogin").addEventListener("submit", async function(e) {
-  e.preventDefault();
-  const email = document.getElementById("ksLoginEmail").value.trim();
-  const password = document.getElementById("ksLoginPassword").value;
-  const msg = document.getElementById("ksMessage");
-  msg.textContent = "Connexion en cours...";
-  const { data, error } = await supabaseClient.auth.signInWithPassword({
-    email: email,
-    password: password
-  });
-  if (error) {
-    msg.textContent = "Erreur : " + error.message;
-    return;
-  }
-  const profile = await ksLoadProfile(data.user);
-  ksShowConnected(data.user, profile);
+document.getElementById("ksLogin").addEventListener("submit",async function(e){
+ e.preventDefault();const form=this,email=document.getElementById("ksLoginEmail").value.trim().toLowerCase(),password=document.getElementById("ksLoginPassword").value;
+ ksBusy(form,true,"Connexion...");ksAuthMessage("Connexion à votre espace élève...");
+ try{const {data,error}=await supabaseClient.auth.signInWithPassword({email,password});if(error)throw error;const profile=await ksLoadProfile(data.user);ksShowConnected(data.user,profile);}
+ catch(err){ksAuthMessage(ksAuthError(err),"error");if(/email not confirmed/i.test(String(err&&err.message||"")))ksAddResend(email);}
+ finally{ksBusy(form,false);}
 });
-
-// Restaurer la session automatiquement : les élèves déjà connectés ne revoient pas le formulaire.
-(async function() {
-  try {
-    const { data, error } = await supabaseClient.auth.getSession();
-    if (error || !data.session || !data.session.user) return;
-    const profile = await ksLoadProfile(data.session.user);
-    ksShowConnected(data.session.user, profile);
-  } catch (error) {
-    console.log("Session KS :", error);
-  }
+const forgot=document.createElement("button");forgot.type="button";forgot.id="ksForgotPassword";forgot.textContent="Mot de passe oublié ?";
+forgot.style.cssText="display:block;margin-top:10px;padding:8px 0;border:0;background:transparent;color:#7040a0;text-decoration:underline;cursor:pointer;";
+document.getElementById("ksLogin").insertAdjacentElement("afterend",forgot);
+forgot.addEventListener("click",async function(){
+ const email=document.getElementById("ksLoginEmail").value.trim().toLowerCase();
+ if(!email){ksAuthMessage("Saisissez d'abord votre adresse e-mail dans le champ de connexion.","error");document.getElementById("ksLoginEmail").focus();return;}
+ forgot.disabled=true;try{const {error}=await supabaseClient.auth.resetPasswordForEmail(email,{redirectTo:ksRedirect()});if(error)throw error;ksAuthMessage("Si cette adresse correspond à un compte, un message de réinitialisation sera envoyé. Vérifiez aussi les courriers indésirables.","success");}
+ catch(err){ksAuthMessage(ksAuthError(err),"error");}finally{forgot.disabled=false;}
+});
+(async function(){
+ try{const {data,error}=await supabaseClient.auth.getSession();if(error)throw error;if(data.session&&data.session.user){const profile=await ksLoadProfile(data.session.user);ksShowConnected(data.session.user,profile);}}
+ catch(error){console.log("Session KS :",error);}
 })();
 
-
-  </script>
+</script>
 
 
 <script>

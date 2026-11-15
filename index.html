@@ -792,13 +792,24 @@ function ksShowConnected(user, profile) {
     (user.user_metadata && user.user_metadata.full_name) || user.email || "Élève";
   const role = profile && profile.role ? profile.role : "élève";
   ksActivateTPForSession(user.id);
+  authBox.style.cssText = "position:fixed;top:14px;right:14px;z-index:99999;width:auto;max-width:calc(100vw - 28px);margin:0;padding:0;background:transparent;border:0;border-radius:50%;box-shadow:none;font-family:Arial,sans-serif;";
   authBox.innerHTML = `
-    <h2 style="color:#7040a0">Bienvenue ${ksSafeText(name)} !</h2>
-    <p>Votre espace KS INFORMATIQUE est ouvert.</p>
-    <p>Votre rôle : <strong>${ksSafeText(role)}</strong></p>
-    <p>Votre inscription est reconnue. Le formulaire d'inscription ne s'affichera plus tant que vous restez connecté.</p>
-    <button id="ksLogout" type="button">Déconnexion</button>
+    <button id="ksProfileToggle" type="button" aria-label="Ouvrir mon profil" aria-expanded="false" title="Mon espace élève" style="width:48px;height:48px;border:0;border-radius:50%;background:#7040a0;color:white;font-size:25px;cursor:pointer;box-shadow:0 3px 12px #0003;display:flex;align-items:center;justify-content:center;">
+      <svg viewBox="0 0 24 24" width="27" height="27" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg>
+    </button>
+    <div id="ksProfileMenu" hidden style="position:absolute;top:56px;right:0;width:270px;max-width:calc(100vw - 36px);padding:17px;background:white;color:#222;border:1px solid #e5d9f2;border-radius:14px;box-shadow:0 8px 28px #0002;">
+      <strong style="display:block;color:#7040a0;font-size:16px;margin-bottom:7px;">Bienvenue ${ksSafeText(name)} !</strong>
+      <span style="display:block;font-size:13px;margin-bottom:6px;">Espace KS INFORMATIQUE ouvert</span>
+      <span style="display:block;font-size:13px;margin-bottom:14px;">Votre rôle : <b>${ksSafeText(role)}</b></span>
+      <button id="ksLogout" type="button" style="width:100%;padding:10px;border:0;border-radius:8px;background:#7040a0;color:white;cursor:pointer;">Déconnexion</button>
+    </div>
   `;
+  document.getElementById("ksProfileToggle").addEventListener("click", function() {
+    const menu = document.getElementById("ksProfileMenu");
+    const opening = menu.hidden;
+    menu.hidden = !opening;
+    this.setAttribute("aria-expanded", String(opening));
+  });
   document.getElementById("ksLogout").addEventListener("click", async function() {
     ksDeactivateTP();
     const result = await supabaseClient.auth.signOut();

@@ -994,10 +994,20 @@ document.getElementById("ksLogin").addEventListener("submit", async function(e) 
   var help = overlay.querySelector('#ksInstallHelp');
   var later = overlay.querySelector('#ksInstallLater');
 
-  function showInstall(){
-    if (isStandalone || sessionStorage.getItem('ks-install-dismissed') === '1') return;
+  function showInstall(force){
+    if (isStandalone) return;
+    if (!force && sessionStorage.getItem('ks-install-dismissed') === '1') return;
     overlay.style.display = 'flex';
   }
+  // Bouton d'installation toujours disponible, même si le navigateur
+  // ne déclenche pas l'événement natif beforeinstallprompt.
+  var installLauncher = document.createElement('button');
+  installLauncher.id = 'ksInstallLauncher';
+  installLauncher.type = 'button';
+  installLauncher.textContent = '⬇ Installer KS';
+  installLauncher.style.cssText = 'position:fixed;right:16px;bottom:92px;z-index:10000;border:0;border-radius:999px;padding:13px 18px;background:#FFD21F;color:#1B1433;font-weight:900;font-size:14px;box-shadow:0 6px 22px rgba(25,12,55,.25);cursor:pointer';
+  document.body.appendChild(installLauncher);
+  installLauncher.addEventListener('click',function(){showInstall(true);});
   function closeInstall(){
     overlay.style.display = 'none';
     sessionStorage.setItem('ks-install-dismissed','1');
@@ -1036,6 +1046,7 @@ document.getElementById("ksLogin").addEventListener("submit", async function(e) 
   });
   window.addEventListener('appinstalled',function(){
     overlay.style.display='none';
+    installLauncher.style.display='none';
     sessionStorage.setItem('ks-install-dismissed','1');
   });
 

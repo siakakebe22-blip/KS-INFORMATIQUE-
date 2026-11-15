@@ -1295,7 +1295,7 @@ function ksBusy(form,busy,label){
  if(busy){b.dataset.original=b.textContent;b.disabled=true;b.textContent=label;}
  else{b.disabled=false;b.textContent=b.dataset.original||"Valider";}
 }
-function ksRedirect(){return location.origin+location.pathname;}
+function ksRedirect(){return "https://siakakebe22-blip.github.io/KS-INFORMATIQUE-/";}
 function ksAddResend(email){
  let b=document.getElementById("ksResendConfirmation");
  if(!b){b=document.createElement("button");b.id="ksResendConfirmation";b.type="button";b.style.cssText="margin-top:8px;padding:11px 14px;border:0;border-radius:8px;background:#7040a0;color:white;cursor:pointer;";document.getElementById("ksMessage").insertAdjacentElement("afterend",b);}

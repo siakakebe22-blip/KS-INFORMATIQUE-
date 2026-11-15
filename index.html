@@ -544,23 +544,30 @@ function glossaire(){
 }
 
 function render(){
-  var r=(location.hash||'#accueil').slice(1),nav='accueil',v;
-  if(r.indexOf('cours-')===0&&M[r.slice(6)]){v=course(r.slice(6));nav='cours';}
-  else if(r==='cours'){v=catalog();nav='cours';}
-  else if(r==='guide'){v=guideEtude();nav='guide';}
-  else if(r==='glossaire'){v=glossaire();nav='glossaire';}
-  else if(r==='videos'){v=videos();nav='videos';}
-  else if(r.indexOf('quiz-')===0&&QZ[r.slice(5)]){v=quiz(r.slice(5));nav='quiz';}
-  else if(r==='quiz'){v=quizMenu();nav='quiz';}
-  else if(r==='resultats'){v=results();nav='resultats';}
-  else if(r==='attestations'){v=attest();nav='resultats';}
-  else if(r==='profil'){v=profil();nav='profil';}
-  else if(r==='ressources'){v=resources();nav='ressources';}
-  else if(r==='apropos'){v=apropos();nav='apropos';}
-  else if(r==='contact'){v=contact();nav='contact';}
-  else v=home();
-  g('app').innerHTML=v;
-  g('nv').querySelectorAll('a').forEach(function(a){a.className=(a.getAttribute('href')==='#'+nav)?'on':'';});
+  try{
+  
+    var r=(location.hash||'#accueil').slice(1),nav='accueil',v;
+    if(r.indexOf('cours-')===0&&M[r.slice(6)]){v=course(r.slice(6));nav='cours';}
+    else if(r==='cours'){v=catalog();nav='cours';}
+    else if(r==='guide'){v=guideEtude();nav='guide';}
+    else if(r==='glossaire'){v=glossaire();nav='glossaire';}
+    else if(r==='videos'){v=videos();nav='videos';}
+    else if(r.indexOf('quiz-')===0&&QZ[r.slice(5)]){v=quiz(r.slice(5));nav='quiz';}
+    else if(r==='quiz'){v=quizMenu();nav='quiz';}
+    else if(r==='resultats'){v=results();nav='resultats';}
+    else if(r==='attestations'){v=attest();nav='resultats';}
+    else if(r==='profil'){v=profil();nav='profil';}
+    else if(r==='ressources'){v=resources();nav='ressources';}
+    else if(r==='apropos'){v=apropos();nav='apropos';}
+    else if(r==='contact'){v=contact();nav='contact';}
+    else v=home();
+    g('app').innerHTML=v;
+    g('nv').querySelectorAll('a').forEach(function(a){a.className=(a.getAttribute('href')==='#'+nav)?'on':'';});
+  }catch(err){
+    console.error('Erreur de navigation KS :',err);
+    var app=document.getElementById('app');
+    if(app){app.innerHTML='<section class="pnl" style="margin:20px 0;border:2px solid #d9534f"><h2>Impossible d’afficher cette page</h2><p>Une erreur technique empêche le chargement du contenu.</p><p><b>Détail :</b> '+String(err&&err.message||err).replace(/[<>&]/g,function(c){return {'<':'&lt;','>':'&gt;','&':'&amp;'}[c];})+'</p><button class="btn" onclick="location.hash=\'#accueil\';location.reload()">Retour à l’accueil</button></section>';}
+  }
 }
 g('app').addEventListener('click',function(e){
   var t=e.target.closest('button');if(!t)return;

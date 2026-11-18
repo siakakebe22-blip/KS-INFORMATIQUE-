@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1540" viewBox="0 0 1200 1540" role="img" aria-labelledby="title desc">
+<title id="title">Les cinq façons d’éteindre un ordinateur sous Windows</title>
+<desc id="desc">Infographie pédagogique illustrant le menu Démarrer, le raccourci Alt plus F4, le bouton d’alimentation configuré, la commande shutdown et l’arrêt forcé en dernier recours.</desc>
+<defs>
+ <linearGradient id="bg" x2="1" y2="1"><stop stop-color="#f8fbff"/><stop offset="1" stop-color="#edf4fb"/></linearGradient>
+ <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="0" dy="5" stdDeviation="7" flood-color="#18324b" flood-opacity=".12"/></filter>
+ <style>
+ .h{font:700 36px Arial,sans-serif;fill:#12243a}.sub{font:20px Arial,sans-serif;fill:#4c6074}.n{font:700 32px Arial,sans-serif;fill:white}.t{font:700 25px Arial,sans-serif;fill:#17324d}.p{font:20px Arial,sans-serif;fill:#30465c}.small{font:17px Arial,sans-serif;fill:#52677b}.key{font:700 26px Arial,sans-serif;fill:#fff}.ui{font:18px Arial,sans-serif;fill:#e9f2fb}
+ </style>
+</defs>
+<rect width="1200" height="1540" rx="28" fill="url(#bg)"/>
+<text x="600" y="70" text-anchor="middle" class="h" font-size="42">LES 5 FAÇONS D’ÉTEINDRE UN ORDINATEUR</text>
+<text x="600" y="110" text-anchor="middle" class="sub">Windows • Guide illustré pour les élèves</text>
+<g filter="url(#shadow)">
+ <rect x="45" y="145" width="1110" height="225" rx="22" fill="#fff"/>
+ <rect x="65" y="165" width="70" height="70" rx="18" fill="#2376c8"/><text x="100" y="213" text-anchor="middle" class="n">1</text>
+ <text x="160" y="195" class="t">Depuis le menu Démarrer — méthode recommandée</text>
+ <text x="160" y="232" class="p">Démarrer  →  Marche/Arrêt  →  Arrêter</text>
+ <rect x="165" y="255" width="260" height="90" rx="12" fill="#172b42"/>
+ <rect x="178" y="267" width="65" height="65" rx="8" fill="#2376c8"/>
+ <g fill="#fff"><rect x="191" y="280" width="12" height="12"/><rect x="208" y="280" width="12" height="12"/><rect x="191" y="297" width="12" height="12"/><rect x="208" y="297" width="12" height="12"/></g>
+ <text x="260" y="292" class="ui">Démarrer</text><text x="260" y="320" class="ui">Menu Windows</text>
+ <path d="M445 300h55m-15 -12 15 12 -15 12" stroke="#2376c8" stroke-width="6" fill="none" stroke-linecap="round"/>
+ <rect x="520" y="255" width="220" height="90" rx="12" fill="#263c55"/>
+ <circle cx="560" cy="300" r="19" fill="none" stroke="#fff" stroke-width="5"/><path d="M560 274v24" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
+ <text x="592" y="307" class="ui">Arrêter</text>
+ <path d="M760 300h55m-15 -12 15 12 -15 12" stroke="#2376c8" stroke-width="6" fill="none" stroke-linecap="round"/>
+ <rect x="835" y="255" width="280" height="90" rx="12" fill="#15263b"/>
+ <circle cx="975" cy="286" r="16" fill="none" stroke="#80c7ff" stroke-width="4" stroke-dasharray="6 5"/>
+ <text x="975" y="325" text-anchor="middle" class="ui">Arrêt en cours…</text>
+</g>
+<g filter="url(#shadow)">
+ <rect x="45" y="395" width="1110" height="205" rx="22" fill="#fff"/>
+ <rect x="65" y="415" width="70" height="70" rx="18" fill="#27964f"/><text x="100" y="463" text-anchor="middle" class="n">2</text>
+ <text x="160" y="447" class="t">Avec le raccourci clavier Alt + F4</text>
+ <text x="160" y="485" class="p">Afficher le Bureau, appuyer sur Alt + F4, puis choisir « Arrêter ».</text>
+ <rect x="190" y="510" width="170" height="65" rx="12" fill="#27394d"/><text x="275" y="552" text-anchor="middle" class="key">Alt</text>
+ <text x="390" y="556" class="h" font-size="40">+</text>
+ <rect x="445" y="510" width="150" height="65" rx="12" fill="#27394d"/><text x="520" y="552" text-anchor="middle" class="key">F4</text>
+ <path d="M620 542h75m-15 -12 15 12 -15 12" stroke="#27964f" stroke-width="6" fill="none" stroke-linecap="round"/>
+ <rect x="725" y="500" width="385" height="80" rx="10" fill="#eef3f8" stroke="#9aabba" stroke-width="2"/>
+ <text x="745" y="528" class="small">Arrêter Windows</text><rect x="745" y="540" width="220" height="27" rx="5" fill="#fff" stroke="#9aabba"/><text x="755" y="560" class="small">Arrêter</text><rect x="985" y="540" width="95" height="27" rx="6" fill="#dce9f7"/><text x="1032" y="560" text-anchor="middle" class="small">OK</text>
+</g>
+<g filter="url(#shadow)">
+ <rect x="45" y="625" width="1110" height="205" rx="22" fill="#fff"/>
+ <rect x="65" y="645" width="70" height="70" rx="18" fill="#e58b20"/><text x="100" y="693" text-anchor="middle" class="n">3</text>
+ <text x="160" y="677" class="t">Avec le bouton physique d’alimentation</text>
+ <text x="160" y="715" class="p">Un appui bref peut arrêter, mettre en veille ou ne rien faire.</text>
+ <text x="160" y="748" class="small">Le résultat dépend du réglage des boutons d’alimentation dans Windows.</text>
+ <rect x="200" y="765" width="270" height="45" rx="9" fill="#263b50"/>
+ <rect x="220" y="775" width="230" height="25" rx="5" fill="#34536f"/>
+ <circle cx="565" cy="780" r="45" fill="#e8eef4" stroke="#c4d1dd" stroke-width="4"/>
+ <circle cx="565" cy="780" r="22" fill="#27394d"/><path d="M565 746v30" stroke="#fff" stroke-width="6" stroke-linecap="round"/><path d="M548 759a22 22 0 1 0 34 0" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
+ <path d="M635 780h90m-15 -12 15 12 -15 12" stroke="#e58b20" stroke-width="6" fill="none" stroke-linecap="round"/>
+ <rect x="755" y="744" width="350" height="68" rx="12" fill="#fff6e9" stroke="#e8b66d" stroke-width="2"/>
+ <text x="930" y="773" text-anchor="middle" class="small">Vérifier le réglage avant usage</text><text x="930" y="798" text-anchor="middle" class="small">Ne pas confondre appui bref et appui long</text>
+</g>
+<g filter="url(#shadow)">
+ <rect x="45" y="855" width="1110" height="205" rx="22" fill="#fff"/>
+ <rect x="65" y="875" width="70" height="70" rx="18" fill="#8050b5"/><text x="100" y="923" text-anchor="middle" class="n">4</text>
+ <text x="160" y="907" class="t">Avec la commande d’arrêt</text>
+ <text x="160" y="945" class="p">Windows + R  →  saisir la commande  →  Entrée</text>
+ <rect x="180" y="975" width="150" height="60" rx="10" fill="#26394d"/><text x="255" y="1014" text-anchor="middle" class="key">Win + R</text>
+ <path d="M350 1005h65m-15 -12 15 12 -15 12" stroke="#8050b5" stroke-width="6" fill="none" stroke-linecap="round"/>
+ <rect x="435" y="975" width="500" height="60" rx="9" fill="#f3f6fa" stroke="#aab8c6" stroke-width="2"/>
+ <text x="460" y="1013" class="p" font-family="monospace">shutdown /s /t 0</text>
+ <path d="M950 1005h55m-15 -12 15 12 -15 12" stroke="#8050b5" stroke-width="6" fill="none" stroke-linecap="round"/>
+ <circle cx="1070" cy="1005" r="34" fill="#8050b5"/><path d="M1070 985v22m-14 -12a22 22 0 1 0 28 0" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
+</g>
+<g filter="url(#shadow)">
+ <rect x="45" y="1085" width="1110" height="225" rx="22" fill="#fff"/>
+ <rect x="65" y="1105" width="70" height="70" rx="18" fill="#c93434"/><text x="100" y="1153" text-anchor="middle" class="n">5</text>
+ <text x="160" y="1137" class="t">Forcer l’arrêt en cas de blocage — dernier recours</text>
+ <text x="160" y="1175" class="p">Seulement si l’ordinateur ne répond plus du tout.</text>
+ <rect x="180" y="1200" width="300" height="90" rx="12" fill="#152334"/>
+ <circle cx="330" cy="1238" r="17" fill="none" stroke="#d7e4ef" stroke-width="4" stroke-dasharray="5 5"/>
+ <text x="330" y="1275" text-anchor="middle" class="ui">Écran bloqué</text>
+ <path d="M505 1245h80m-15 -12 15 12 -15 12" stroke="#c93434" stroke-width="6" fill="none" stroke-linecap="round"/>
+ <circle cx="665" cy="1245" r="44" fill="#e8eef4" stroke="#c4d1dd" stroke-width="4"/><circle cx="665" cy="1245" r="22" fill="#27394d"/><path d="M665 1211v30" stroke="#fff" stroke-width="6" stroke-linecap="round"/><path d="M648 1224a22 22 0 1 0 34 0" fill="none" stroke="#fff" stroke-width="5"/>
+ <rect x="750" y="1197" width="350" height="94" rx="12" fill="#fff0f0" stroke="#d87a7a" stroke-width="2"/>
+ <text x="775" y="1230" class="t" fill="#b32626">ATTENTION</text><text x="775" y="1260" class="small">Risque de perte de données.</text><text x="775" y="1284" class="small">Ne pas utiliser pour l’arrêt normal.</text>
+</g>
+<rect x="45" y="1340" width="1110" height="145" rx="20" fill="#e3effa" stroke="#a8c4df" stroke-width="2"/>
+<text x="600" y="1385" text-anchor="middle" class="t" font-size="27">À RETENIR</text>
+<text x="600" y="1425" text-anchor="middle" class="p">Enregistrer ses documents avant d’éteindre l’ordinateur.</text>
+<text x="600" y="1460" text-anchor="middle" class="p">Pour un usage quotidien, choisir Démarrer → Marche/Arrêt → Arrêter.</text>
+<text x="600" y="1515" text-anchor="middle" class="small">KS INFORMATIQUE • Support pédagogique</text>
+</svg>

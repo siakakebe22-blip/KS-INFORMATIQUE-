@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1480" viewBox="0 0 1200 1480">
+<title>Les dix branches de l’informatique</title>
+<defs><linearGradient id="bg" x2="1" y2="1"><stop stop-color="#f5f9ff"/><stop offset="1" stop-color="#eaf2fb"/></linearGradient><style>
+.h{font:700 42px Arial;fill:#132b45}.sub{font:21px Arial;fill:#52677b}.t{font:700 24px Arial;fill:#17324d}.p{font:18px Arial;fill:#43586c}.n{font:700 25px Arial;fill:white}.icon{font:38px Arial}
+</style></defs>
+<rect width="1200" height="1480" rx="28" fill="url(#bg)"/>
+<text x="600" y="72" text-anchor="middle" class="h">LES 10 BRANCHES DE L’INFORMATIQUE</text>
+<text x="600" y="112" text-anchor="middle" class="sub">Chaque spécialité répond à un besoin précis</text><rect x="55" y="155" width="520" height="220" rx="20" fill="#fff" stroke="#d4e0ec" stroke-width="2"/>
+<rect x="73" y="173" width="58" height="58" rx="15" fill="#2678c8"/>
+<text x="102" y="210" text-anchor="middle" class="n" font-size="19">IA</text>
+<text x="77" y="265" class="t">Intelligence artificielle</text>
+<text x="77" y="300" class="p">Faire apprendre et raisonner les machines</text>
+<text x="77" y="335" class="p">Ex. : reconnaissance d’images, assistant vocal</text><rect x="610" y="155" width="520" height="220" rx="20" fill="#fff" stroke="#d4e0ec" stroke-width="2"/>
+<rect x="628" y="173" width="58" height="58" rx="15" fill="#239b91"/>
+<text x="657" y="210" text-anchor="middle" class="n" font-size="19">NET</text>
+<text x="632" y="265" class="t">Réseaux</text>
+<text x="632" y="300" class="p">Relier des ordinateurs et échanger des données</text>
+<text x="632" y="335" class="p">Ex. : Wi-Fi, réseau d’une école</text><rect x="55" y="405" width="520" height="220" rx="20" fill="#fff" stroke="#d4e0ec" stroke-width="2"/>
+<rect x="73" y="423" width="58" height="58" rx="15" fill="#c34e57"/>
+<text x="102" y="460" text-anchor="middle" class="n" font-size="19">SEC</text>
+<text x="77" y="515" class="t">Cybersécurité</text>
+<text x="77" y="550" class="p">Protéger les systèmes et les informations</text>
+<text x="77" y="585" class="p">Ex. : mots de passe, antivirus, chiffrement</text><rect x="610" y="405" width="520" height="220" rx="20" fill="#fff" stroke="#d4e0ec" stroke-width="2"/>
+<rect x="628" y="423" width="58" height="58" rx="15" fill="#8b62bd"/>
+<text x="657" y="460" text-anchor="middle" class="n" font-size="19">DB</text>
+<text x="632" y="515" class="t">Bases de données</text>
+<text x="632" y="550" class="p">Stocker, organiser et retrouver les informations</text>
+<text x="632" y="585" class="p">Ex. : fichiers clients, dossiers médicaux</text><rect x="55" y="655" width="520" height="220" rx="20" fill="#fff" stroke="#d4e0ec" stroke-width="2"/>
+<rect x="73" y="673" width="58" height="58" rx="15" fill="#3978b8"/>
+<text x="102" y="710" text-anchor="middle" class="n" font-size="19">CODE</text>
+<text x="77" y="765" class="t">Programmation</text>
+<text x="77" y="800" class="p">Écrire des instructions sous forme de code</text>
+<text x="77" y="835" class="p">Ex. : créer une application mobile</text><rect x="610" y="655" width="520" height="220" rx="20" fill="#fff" stroke="#d4e0ec" stroke-width="2"/>
+<rect x="628" y="673" width="58" height="58" rx="15" fill="#526a83"/>
+<text x="657" y="710" text-anchor="middle" class="n" font-size="19">OS</text>
+<text x="632" y="765" class="t">Systèmes d’exploitation</text>
+<text x="632" y="800" class="p">Gérer le matériel et faire fonctionner l’appareil</text>
+<text x="632" y="835" class="p">Ex. : Windows, Linux, Android</text><rect x="55" y="905" width="520" height="220" rx="20" fill="#fff" stroke="#d4e0ec" stroke-width="2"/>
+<rect x="73" y="923" width="58" height="58" rx="15" fill="#ca8740"/>
+<text x="102" y="960" text-anchor="middle" class="n" font-size="19">GEN</text>
+<text x="77" y="1015" class="t">Génie logiciel</text>
+<text x="77" y="1050" class="p">Concevoir, organiser et tester des logiciels fiables</text>
+<text x="77" y="1085" class="p">Ex. : projet logiciel réalisé en équipe</text><rect x="610" y="905" width="520" height="220" rx="20" fill="#fff" stroke="#d4e0ec" stroke-width="2"/>
+<rect x="628" y="923" width="58" height="58" rx="15" fill="#b15e9b"/>
+<text x="657" y="960" text-anchor="middle" class="n" font-size="19">ART</text>
+<text x="632" y="1015" class="t">Multimédia et graphisme</text>
+<text x="632" y="1050" class="p">Traiter les images, les sons et les vidéos</text>
+<text x="632" y="1085" class="p">Ex. : montage vidéo, animation, affiche</text><rect x="55" y="1155" width="520" height="220" rx="20" fill="#fff" stroke="#d4e0ec" stroke-width="2"/>
+<rect x="73" y="1173" width="58" height="58" rx="15" fill="#4b9874"/>
+<text x="102" y="1210" text-anchor="middle" class="n" font-size="19">BOT</text>
+<text x="77" y="1265" class="t">Robotique</text>
+<text x="77" y="1300" class="p">Faire agir des machines dans le monde réel</text>
+<text x="77" y="1335" class="p">Ex. : robot industriel, drone</text><rect x="610" y="1155" width="520" height="220" rx="20" fill="#fff" stroke="#d4e0ec" stroke-width="2"/>
+<rect x="628" y="1173" width="58" height="58" rx="15" fill="#6480a9"/>
+<text x="657" y="1210" text-anchor="middle" class="n" font-size="19">SCI</text>
+<text x="632" y="1265" class="t">Calcul scientifique</text>
+<text x="632" y="1300" class="p">Réaliser des calculs complexes et des simulations</text>
+<text x="632" y="1335" class="p">Ex. : prévisions météo, modélisation</text><rect x="55" y="1410" width="1090" height="45" rx="14" fill="#dceaf8"/><text x="600" y="1440" text-anchor="middle" class="sub">KS INFORMATIQUE • Observer le besoin pour reconnaître la spécialité</text></svg>

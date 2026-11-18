@@ -480,13 +480,45 @@ windows:{t:'Windows',s:'Maîtrisez le système d’exploitation de Microsoft.',o
 <h4>3. Comment éteindre correctement un ordinateur Windows ?</h4>
 <ol><li>Enregistrer le travail en cours : dans Word ou Excel, utiliser <b>Ctrl + S</b> ou choisir Fichier, puis Enregistrer.</li><li>Fermer les documents et les applications. Si une fenêtre demande d’enregistrer les modifications, choisir Enregistrer si l’on veut conserver le travail.</li><li>Cliquer sur le bouton <b>Démarrer</b> de Windows, dans la barre des tâches.</li><li>Cliquer sur le bouton <b>Marche/Arrêt</b> (symbole ⏻).</li><li>Choisir <b>Arrêter</b> ou <b>Arrêter le PC</b>, selon la version de Windows.</li><li>Attendre que l’écran s’éteigne et que l’ordinateur ait terminé son arrêt. Sur un ordinateur de bureau, l’unité centrale doit également s’arrêter.</li></ol>
 <div style="margin:16px 0;padding:14px;border:1px solid var(--line);border-radius:14px;background:var(--card,#fff)"><h4 style="margin-top:0">Chemin à suivre dans Windows</h4><div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px;text-align:center"><span style="padding:10px 13px;border-radius:9px;background:rgba(57,119,189,.13);font-weight:700">Démarrer</span><b>→</b><span style="padding:10px 13px;border-radius:9px;background:rgba(189,135,49,.14);font-weight:700">Marche/Arrêt ⏻</span><b>→</b><span style="padding:10px 13px;border-radius:9px;background:rgba(36,150,109,.13);font-weight:700">Arrêter</span></div><p style="font-size:.9em;margin:10px 0 0">C’est la méthode normale pour éteindre Windows. Les mots ou l’apparence des menus peuvent varier légèrement selon la version.</p></div>
-<h4>4. Ne pas confondre les trois options</h4>
+<h4>4. Les cinq façons d’éteindre un ordinateur</h4>
+<p>La méthode recommandée reste <b>Démarrer → Marche/Arrêt → Arrêter</b>. Les autres méthodes peuvent être utiles dans certaines situations, mais elles ne sont pas toutes adaptées à un usage quotidien.</p>
+<div style="display:grid;gap:12px;margin:14px 0">
+<div style="padding:13px;border:1px solid var(--line);border-left:5px solid #2877c7;border-radius:12px;background:var(--card)">
+<h4 style="margin-top:0">Méthode 1 — Depuis le menu Démarrer</h4>
+<p><b>Étapes :</b> cliquer sur Démarrer → Marche/Arrêt ⏻ → Arrêter, puis attendre l’extinction complète.</p>
+<p><b>À retenir :</b> c’est la méthode la plus simple et la plus recommandée pour l’arrêt habituel.</p>
+</div>
+<div style="padding:13px;border:1px solid var(--line);border-left:5px solid #26964d;border-radius:12px;background:var(--card)">
+<h4 style="margin-top:0">Méthode 2 — Avec le raccourci Alt + F4</h4>
+<ol><li>Enregistrer le travail et fermer les fenêtres ouvertes.</li><li>Afficher le Bureau Windows (par exemple avec Windows + D).</li><li>Appuyer simultanément sur <b>Alt + F4</b>.</li><li>Dans la fenêtre « Arrêter Windows », choisir <b>Arrêter</b> si cette option n’est pas déjà sélectionnée.</li><li>Valider avec <b>Entrée</b> ou cliquer sur OK.</li></ol>
+<p><b>Attention :</b> si une application est encore active, Alt + F4 peut fermer cette application au lieu d’afficher la fenêtre d’arrêt.</p>
+</div>
+<div style="padding:13px;border:1px solid var(--line);border-left:5px solid #e58b20;border-radius:12px;background:var(--card)">
+<h4 style="margin-top:0">Méthode 3 — Avec le bouton d’alimentation</h4>
+<p>Sur certains ordinateurs, un appui bref sur le bouton ⏻ peut déclencher l’arrêt. Mais ce bouton peut aussi être configuré pour mettre l’ordinateur en veille ou ne rien faire.</p>
+<p><b>Pour vérifier le réglage :</b> ouvrir le Panneau de configuration → Options d’alimentation → Choisir l’action des boutons d’alimentation. Selon la version de Windows, le chemin peut varier.</p>
+<p><b>Important :</b> ne pas supposer qu’un appui bref éteint toujours l’ordinateur. Vérifier le comportement configuré avec l’enseignant.</p>
+</div>
+<div style="padding:13px;border:1px solid var(--line);border-left:5px solid #8050b5;border-radius:12px;background:var(--card)">
+<h4 style="margin-top:0">Méthode 4 — Avec la commande d’arrêt</h4>
+<ol><li>Enregistrer les documents et fermer les applications.</li><li>Appuyer sur <b>Windows + R</b> pour ouvrir la fenêtre Exécuter.</li><li>Saisir exactement <code>shutdown /s /t 0</code>.</li><li>Appuyer sur Entrée. Windows lance l’arrêt.</li></ol>
+<p><b>Explication :</b> <code>shutdown</code> est la commande d’arrêt, <code>/s</code> demande l’arrêt de l’ordinateur et <code>/t 0</code> indique un délai de zéro seconde.</p>
+<p><b>Prudence :</b> cette commande lance l’arrêt directement. Il faut enregistrer son travail avant de l’exécuter.</p>
+</div>
+<div style="padding:13px;border:1px solid var(--line);border-left:5px solid #c93434;border-radius:12px;background:var(--card)">
+<h4 style="margin-top:0">Méthode 5 — Forcer l’arrêt en cas de blocage</h4>
+<p>Si l’ordinateur est complètement bloqué et ne répond plus, attendre d’abord. En dernier recours seulement, maintenir le bouton d’alimentation enfoncé pendant plusieurs secondes, jusqu’à l’extinction.</p>
+<p><b>Danger :</b> cette méthode coupe l’alimentation de manière brutale. Elle peut faire perdre les documents non enregistrés, interrompre une mise à jour ou endommager des fichiers. Ne jamais l’utiliser pour un arrêt ordinaire.</p>
+</div>
+</div>
+<p><b>Conseil de l’enseignant :</b> les élèves doivent apprendre d’abord la méthode 1. Les méthodes 2 et 4 sont des alternatives à connaître. La méthode 3 dépend du réglage de l’ordinateur. La méthode 5 est réservée aux blocages graves.</p>
+<h4>5. Ne pas confondre les trois options</h4>
 <ul><li><b>Mettre en veille :</b> l’ordinateur consomme peu d’énergie et reprend rapidement le travail. Il n’est pas complètement éteint.</li><li><b>Redémarrer :</b> Windows ferme la session puis démarre de nouveau. Cette option peut aider après une mise à jour ou un problème.</li><li><b>Arrêter :</b> ferme Windows et éteint normalement l’ordinateur.</li></ul>
-<h4>5. Les erreurs à éviter</h4>
+<h4>6. Les erreurs à éviter</h4>
 <ul><li>Ne pas débrancher directement le câble électrique pour éteindre l’ordinateur.</li><li>Ne pas couper la multiprise ou l’onduleur pendant que l’ordinateur fonctionne.</li><li>Ne pas maintenir le bouton d’alimentation appuyé pour un arrêt ordinaire : cela peut faire perdre les travaux non enregistrés.</li><li>Ne pas interrompre une mise à jour de Windows en coupant l’alimentation. Attendre la fin de l’opération.</li><li>Ne pas appuyer plusieurs fois sur le bouton d’alimentation pendant le démarrage.</li></ul>
-<h4>6. Si l’ordinateur ne démarre pas ou ne répond plus</h4>
+<h4>7. Si l’ordinateur ne démarre pas ou ne répond plus</h4>
 <ul><li><b>Aucun voyant :</b> vérifier prudemment la prise, le chargeur et les branchements visibles. Ne jamais manipuler un câble endommagé.</li><li><b>L’écran reste noir :</b> vérifier que l’écran est allumé et que son câble est correctement branché. Sur un portable, brancher le chargeur et patienter quelques minutes.</li><li><b>Windows semble encore démarrer :</b> patienter quelques minutes, surtout après une mise à jour.</li><li><b>Ordinateur totalement bloqué :</b> attendre d’abord. Si aucune commande ne répond, l’arrêt forcé par maintien du bouton d’alimentation pendant plusieurs secondes est un dernier recours seulement. Il peut entraîner la perte de données ou interrompre une opération en cours. Demander l’aide de l’enseignant ou d’un technicien si le problème revient.</li></ul>
-<h4>7. Travail pratique en classe</h4>
+<h4>8. Travail pratique en classe</h4>
 <ol><li>Avec l’autorisation de l’enseignant, repérer le bouton d’alimentation de l’ordinateur.</li><li>Allumer l’ordinateur en appuyant brièvement une seule fois.</li><li>Observer les étapes du démarrage jusqu’au Bureau Windows.</li><li>Ouvrir un document d’exercice et saisir une courte phrase.</li><li>Enregistrer le document avec Ctrl + S.</li><li>Fermer le document, puis arrêter Windows par Démarrer → Marche/Arrêt → Arrêter.</li><li>Décrire oralement les étapes dans le bon ordre.</li></ol>
 <h4>À retenir</h4><p><b>Pour allumer :</b> vérifier l’alimentation, appuyer brièvement sur ⏻ et patienter. <b>Pour éteindre :</b> enregistrer, fermer les applications, puis utiliser la commande Arrêter de Windows.</p>`,
 ex:[['Quel symbole permet de reconnaître le bouton d’alimentation ?','Le symbole ⏻.'],['Quelles sont les étapes normales pour éteindre Windows ?','Enregistrer le travail, fermer les applications, puis cliquer sur Démarrer, Marche/Arrêt et Arrêter.'],['Quelle est la différence entre veille et arrêt ?','La veille conserve la session pour reprendre rapidement ; l’arrêt ferme Windows et éteint normalement l’ordinateur.'],['Pourquoi ne faut-il pas débrancher directement l’ordinateur ?','Cela peut provoquer une perte de données ou interrompre le fonctionnement de Windows.'],['Quand peut-on maintenir le bouton d’alimentation plusieurs secondes ?','Seulement en dernier recours si l’ordinateur est totalement bloqué et ne répond plus.']]},
